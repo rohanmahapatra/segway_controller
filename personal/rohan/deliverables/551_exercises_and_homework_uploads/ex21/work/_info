@@ -1,0 +1,134 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/userspace/r/rmahapatra/ece551/exercie17_class
+T_opt
+!s110 1543212119
+VTb5:TkgNFz7YhMk8HgC6Q1
+04 13 4 work inert_intf_tb fast 0
+=1-000ae431a4f1-5bfb8c57-a0b9d-1be29
+o-quiet -auto_acc_if_foreign -work work +acc
+tCvgOpt 0
+n@_opt
+OL;O;10.6a;65
+R0
+vinert_intf
+Z1 DXx6 sv_std 3 std 0 22 WmjPaeP=7F5?QFXzJ>D[Q2
+Z2 !s110 1543247836
+!i10b 1
+!s100 czM[A^1BNAK49BG7^SC@R2
+InIf7M4?8jSU@UbJVQ0NE01
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+!s105 inert_intf_sv_unit
+S1
+Z4 dI:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21
+w1543213335
+8I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inert_intf.sv
+FI:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inert_intf.sv
+L0 1
+Z5 OV;L;10.4d;61
+r1
+!s85 0
+31
+!s108 1543247835.000000
+!s107 I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inert_intf.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inert_intf.sv|
+!i113 1
+Z6 o-work work -sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+vinert_intf_tb
+R2
+!i10b 1
+!s100 Mg6Q6M_Y618Abi2oNYRFT1
+I87ni1C1a[eWbYBbcH^IS>2
+R3
+R4
+w1543211164
+8I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inert_intf_tb.v
+FI:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inert_intf_tb.v
+L0 1
+R5
+r1
+!s85 0
+31
+Z7 !s108 1543247836.000000
+!s107 I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inert_intf_tb.v|
+!s90 -reportprogress|300|-work|work|-stats=none|I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inert_intf_tb.v|
+!i113 1
+o-work work -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+vinertial_integrator
+R1
+Z8 !s110 1543247837
+!i10b 1
+!s100 <c?4`VVT15hzP8WO@FIF^1
+Ih12Z1oem>LkD3dG0C[NI`2
+R3
+!s105 inertial_integrator_sv_unit
+S1
+R4
+w1543207394
+8I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inertial_integrator.sv
+FI:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inertial_integrator.sv
+L0 3
+R5
+r1
+!s85 0
+31
+R7
+!s107 I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inertial_integrator.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inertial_integrator.sv|
+!i113 1
+R6
+vSegwayModel
+R1
+R8
+!i10b 1
+!s100 Z[;XAW74zQgcMiJ4^iHNd1
+I[G:QOco>z5]2mP_TDgziW0
+R3
+!s105 SegwayModel_sv_unit
+S1
+R4
+w1543209415
+8I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/SegwayModel.sv
+FI:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/SegwayModel.sv
+L0 1
+R5
+r1
+!s85 0
+31
+!s108 1543247837.000000
+!s107 I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/SegwayModel.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/SegwayModel.sv|
+!i113 1
+R6
+n@segway@model
+vSPI_mstr16
+R1
+!s110 1543247838
+!i10b 1
+!s100 bcFI?6VAoP6bZ19DE7f8S2
+IA:ch8jF>QD[nUIfCza2zR2
+R3
+!s105 SPI_mstr162d1_sv_unit
+S1
+R4
+w1543179479
+8I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/SPI_mstr16-1.sv
+FI:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/SPI_mstr16-1.sv
+L0 1
+R5
+r1
+!s85 0
+31
+!s108 1543247838.000000
+!s107 I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/SPI_mstr16-1.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/SPI_mstr16-1.sv|
+!i113 1
+R6
+n@s@p@i_mstr16

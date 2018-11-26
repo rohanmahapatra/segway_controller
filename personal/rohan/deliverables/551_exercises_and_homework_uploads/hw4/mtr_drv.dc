@@ -1,0 +1,49 @@
+##read the files
+read_file -format sverilog { PWM_11.sv mtr_drv.sv}
+
+## set current design to UART which is the top level
+set current_design mtr_drv
+
+link
+
+## constraint the clock - 500Mhz with 50-50 duty cycle
+create_clock -name "clk" -period 2 -waveform {0 1} {clk}
+
+##set dont touch on clk port
+set_dont_touch_network [find port clk]
+
+set prim_inputs [remove_from_collection [all_inputs] [find port clk]]
+
+# set input delay except for clk
+set_input_delay -clock clk 0.7 $prim_inputs
+
+##set drive strength
+set_driving_cell -lib_cell ND2D2BWP -from_pin A1 -library tcbn40lpbwptc $prim_inputs
+
+##set o/p delay
+set_output_delay -clock clk 0.55 [all_outputs]
+
+# set load to tell DC how much o/p load to drive
+set_load 0.15 [all_outputs]
+
+#set max transition time of .10 ns on all nodes
+set_max_transition 0.10 [current_design]
+
+#wire load model to account for wire delays
+set_wire_load_model -name TSMC32K_Lowk_Conservative -library tcbn40lpbwptc
+
+## compile the design
+compile -map_effort medium
+
+
+report_timing -delay min > min_delay.txt
+report_timing -delay max > max_delay.txt
+report_area > mtr_drv_area.txt
+
+
+
+
+## writing the netlist file
+write -format verilog -output mtr_drv.vg
+
+

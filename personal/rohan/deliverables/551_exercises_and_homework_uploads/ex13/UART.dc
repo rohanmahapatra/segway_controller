@@ -1,0 +1,45 @@
+## read the files
+##read_file -format verilog {UART.v}
+read_file -format sverilog { UART_tx.sv UART_rcv.sv UART.v}
+
+## set current design to UART which is the top level
+set current_design UART
+
+## constraint the clock - 500Mhz with 50-50 duty cycle
+create_clock -name "clk" -period 2 -waveform {0 1} {clk}
+
+set_dont_touch_network [find port clk]
+
+set prim_inputs [remove_from_collection [all_inputs] [find port clk]]
+
+# set input delay except for clk
+set_input_delay -clock clk 0.5 $prim_inputs
+
+##set drive strength
+##set_driving_cell-lib_cell AO33D0BWP-from_pin A1-library tcbn40lpbwptc $prim_inputs
+
+set_drive 0.1 $prim_inputs
+
+#set high drive to reset for high fna out
+set_drive 0.1 rst_n
+
+##set o/p delay
+set_output_delay -clock clk 0.75 [all_outputs]
+
+# set load to tell DC how much o/p to drive
+set_load 0.10 [all_outputs]
+
+set_max_transition 0.1 [current_design]
+
+#wire load model to account for wire delays
+set_wire_load_model -name TSMC32K_Lowk_Conservative \-library tcbn40lpbwptc
+
+## compile the design
+compile -map_effort medium
+
+report_area > UART_area.txt
+
+## writing the netlist file
+write -format verilog UART -output UART.vg
+
+

@@ -1,0 +1,84 @@
+/userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/PWM_11.sv {1 {vlog -work work -vopt -sv -stats=none /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/PWM_11.sv
+QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+-- Compiling module srff_async_rst
+-- Compiling module PWM11
+
+Top level modules:
+	PWM11
+
+} {} {}} /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/Segway.v {0 {vlog -work work -vopt -stats=none /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/Segway.v
+QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+-- Compiling module Segway
+** Error: (vlog-13032) /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/Segway.v(33): near ";": Syntax error.
+** Error: (vlog-13032) /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/Segway.v(34): near ";": Syntax error.
+** Error: /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/Segway.v(35): (vlog-13205) Syntax error found in the scope following 'logic'. Is there a missing '::'?
+
+} {4.0 7.0} {}} /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inertial_integrator.sv {1 {vlog -work work -vopt -sv -stats=none /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inertial_integrator.sv
+QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+-- Compiling module inertial_integrator
+
+Top level modules:
+	inertial_integrator
+
+} {} {}} /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/SPI_mstr16-1.sv {1 {vlog -work work -vopt -sv -stats=none /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/SPI_mstr16-1.sv
+QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+-- Compiling module SPI_mstr16
+
+Top level modules:
+	SPI_mstr16
+
+} {} {}} /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/piezo_drv.sv {0 {vlog -work work -vopt -sv -stats=none /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/piezo_drv.sv
+QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+-- Compiling module piezo_drv
+** Error: (vlog-13069) /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/piezo_drv.sv(10): near "x800": syntax error, unexpected IDENTIFIER, expecting ';' or ','.
+** Error: /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/piezo_drv.sv(42): (vlog-2730) Undefined variable: 'audio'.
+
+} {4.0 6.0} {}} /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/rst_synch.sv {1 {vlog -work work -vopt -sv -stats=none /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/rst_synch.sv
+QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+-- Compiling module rst_synch
+
+Top level modules:
+	rst_synch
+
+} {} {}} /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/steer_en.sv {0 {vlog -work work -vopt -sv -stats=none /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/steer_en.sv
+QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+-- Compiling module steer_en
+** Error: (vlog-13069) /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/steer_en.sv(41): near "=": syntax error, unexpected '='.
+** Error: /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/steer_en.sv(41): (vlog-13205) Syntax error found in the scope following 'ld_diff1'. Is there a missing '::'?
+
+} {4.0 6.0} {}} /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/Digital_core.sv {0 {vlog -work work -vopt -sv -stats=none /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/Digital_core.sv
+QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+-- Compiling module Digital_core
+** Error: (vlog-18047) /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/Digital_core.sv(28): near ",": syntax error.
+** Error: (vlog-13069) /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/Digital_core.sv(57): near "EOF": syntax error, unexpected end of source code.
+
+} {4.0 6.0} {}} /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/mtr_drv.sv {1 {vlog -work work -vopt -sv -stats=none /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/mtr_drv.sv
+QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+-- Compiling module mtr_drv
+
+Top level modules:
+	mtr_drv
+
+} {} {}} /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/Auth_blk.sv {1 {vlog -work work -vopt -sv -stats=none /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/Auth_blk.sv
+QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+-- Compiling module Auth_blk
+
+Top level modules:
+	Auth_blk
+
+} {} {}} /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inert_intf.sv {0 {vlog -work work -vopt -sv -stats=none /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inert_intf.sv
+QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+-- Compiling module inert_intf
+** Error: /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inert_intf.sv(81): (vlog-2730) Undefined variable: 'PTCH_D'.
+** Error: /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inert_intf.sv(86): (vlog-2730) Undefined variable: 'PTCHH_D'.
+** Error: /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inert_intf.sv(89): (vlog-2730) Undefined variable: 'AZL_D'.
+** Error: /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inert_intf.sv(92): (vlog-2730) Undefined variable: 'AZH_D'.
+** Error: (vlog-13069) /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inert_intf.sv(94): near "default": syntax error, unexpected default.
+** Error: /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inert_intf.sv(108): (vlog-2730) Undefined variable: 'ptch_rt'.
+** Error: /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inert_intf.sv(108): LHS in procedural continuous assignment may not be a net: ptch_rt.
+** Error: /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inert_intf.sv(109): LHS in procedural continuous assignment may not be a net: az.
+** Error: /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inert_intf.sv(112): Checker 'SPI_mstr16' not found.  Instantiation 'inst_SPI' must be of a visible checker.
+** Error: /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inert_intf.sv(113): Checker 'inertial_integrator' not found.  Instantiation 'inst_inert_integrator' must be of a visible checker.
+** Error: (vlog-13069) /userspace/r/rmahapatra/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/simulations/pt1/inert_intf.sv(143): near "endmodule": syntax error, unexpected endmodule.
+
+} {4.0 15.0} {}}

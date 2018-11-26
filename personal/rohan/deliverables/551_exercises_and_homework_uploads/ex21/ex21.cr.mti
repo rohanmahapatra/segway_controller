@@ -1,0 +1,29 @@
+I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/SegwayModel.sv {1 {vlog -work work -sv -stats=none I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/SegwayModel.sv
+Model Technology ModelSim ALTERA vlog 10.4d Compiler 2015.12 Dec 30 2015
+-- Compiling module SegwayModel
+
+Top level modules:
+	SegwayModel
+
+} {} {}} I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inertial_integrator.sv {1 {vlog -work work -sv -stats=none I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inertial_integrator.sv
+Model Technology ModelSim ALTERA vlog 10.4d Compiler 2015.12 Dec 30 2015
+-- Compiling module inertial_integrator
+
+Top level modules:
+	inertial_integrator
+
+} {} {}} I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/SPI_mstr16-1.sv {1 {vlog -work work -sv -stats=none I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/SPI_mstr16-1.sv
+Model Technology ModelSim ALTERA vlog 10.4d Compiler 2015.12 Dec 30 2015
+-- Compiling module SPI_mstr16
+
+Top level modules:
+	SPI_mstr16
+
+} {} {}} I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inert_intf_tb.v {1 {vlog -work work -stats=none I:/ece551/project/nov_24/personal/rohan/deliverables/551_exercises_and_homework_uploads/ex21/inert_intf_tb.v
+Model Technology ModelSim ALTERA vlog 10.4d Compiler 2015.12 Dec 30 2015
+-- Compiling module inert_intf_tb
+
+Top level modules:
+	inert_intf_tb
+
+} {} {}}

@@ -16,8 +16,40 @@ module steer_en(clk,rst_n,lft_ld, rght_ld,ld_cell_diff,en_steer,rider_off);
  logic  diff_gt_15_16;		// asserted if load cell difference is great (rider stepping off)
  logic clr_tmr;		// clears the 1.3sec timer
   
+reg [25:0] count;
 
- 
+localparam MIN_RIDER_WEIGHT = 100;	// to be updated - error
+
+// code begins
+//
+
+assign sum_gt_min = ((lft_ld + rght_ld) > MIN_RIDER_WEIGHT) ? 1 : 0;
+
+always @ (posedge clk, negedge rst_n) begin
+	if(!rst_n) begin
+		count <= 0;
+	end
+	else if (clr_tmr) count <=0;
+	else if (&count) count <= 0;
+	else count <= count + 1;
+end
+
+wire [11:0] rider_weight, rider_weight_abs;
+
+assign rider_weight = lft_ld - rght_ld;
+assign rider_wieght_abs = rider_weight[11] ? ((~rider_weight)+1) : rider_weight;
+
+assign diff_gt_1_4 = (rider_weight_abs > (lft_ld + rght_ld)/4);
+
+assign diff_gt_15_16 = (rider_weight_abs > 15*((lft_ld + rght_ld)/16));
+
+assign ld_cell_diff = rider_weight_abs;
+
+
+//
+// code ends
+
+
  
  
  
@@ -37,10 +69,6 @@ always_ff @(posedge clk, negedge rst_n) begin
 	
 end
 
-
-ld_diff1 = lft_ld - rght_ld;
-// taking the absolute value of the above signal
-//ld_diff = abs(ld_diff1); - implement this
 
 
 
@@ -74,4 +102,6 @@ case (state)
 end
 endcase
 end
+
+
 endmodule

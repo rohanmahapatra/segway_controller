@@ -15,14 +15,14 @@ input INT; 			//Interrupt signal from inertial sensor, informing that a new meas
 reg [15:0] timer;
 reg int_ff1, int_ff2;
 reg [7:0] ptchl, ptchh, azl, azh;
-wire [15:0] pthc_rt, az;
+wire [15:0] ptch_rt, az;
 logic wrt, vldw;
 logic [15:0] cmd;
 logic [15:0] rd_data;
 logic ptchlw, ptchhw, azlw, azhw, done;
 // ************ State Variables************ //
 // *****************************************//
-typedef enum reg [2:0] { INIT1, INIT2, INIT3, INIT4, PTCHL, PTCHH, AZL, AZH } state_t;
+typedef enum reg [3:0] { INIT1, INIT2, INIT3, INIT4, PTCHL,PTCHL_INIT, PTCHH, AZL, AZH } state_t;
 state_t ns, ps;
 
 // **************** PORTS ***************** //
@@ -73,25 +73,19 @@ always_comb begin
 	vldw = 0;
 	ptchlw = 0; ptchhw = 0; azlw = 0; azhw = 0;
 	case (ps)
+         	INIT1: 		if (&timer) begin cmd = 16'h0D02; ns = INIT2; wrt = 1; end
+		INIT2: 		if (&timer[9:0]) begin cmd =16'h1053 ; ns = INIT3; wrt = 1; end else  ns = INIT2;
+		INIT3: 		if (&timer[9:0]) begin cmd =16'h1050 ; ns = INIT4; wrt = 1; end else ns = INIT3;
+		INIT4: 		if (&timer[9:0]) begin cmd =16'h1460 ; ns = PTCHL_INIT; wrt = 1; end else ns = INIT4;
+		PTCHL_INIT: 	if (int_ff2==1) begin cmd = 16'hA2xx; wrt = 1; ns =PTCHL; end else ns = PTCHL_INIT;
+		PTCHL: 		if(done) begin ptchlw = 1; cmd = 16'hA3xx; wrt = 1; ns = PTCHH;  end 		else ns = PTCHL;
 
-		INIT1: if (&timer) begin cmd = 16'h 0D02; ns = INIT2; wrt = 1; end
-		INIT2: if (&timer[9:0]) begin cmd =16'h1053 ; ns = INIT3; wrt = 1; end else  ns = INIT2;
-		INIT3: if (&timer[9:0]) begin cmd =16'h1050 ; ns = INIT4; wrt = 1; end else ns = INIT3;
-		INIT4: if (&timer[9:0]) begin cmd =16'h1460 ; ns = PTCHL; wrt = 1; end else ns = INIT4;
-		PTCHL: begin 	if (int_ff2==1) begin cmd = 16'hA2xx; wrt = 1; ns =PTCH_D; end
-				else ns = PTCHL;
+		PTCHH: 		if (done) begin ptchhw=1; cmd = 16'hACxx; wrt =1 ;ns = AZL;end 		else ns = PTCHH;		
 		
-		PTCHL_D: if(done) begin ptchlw = 1; ns = PTCHH; end 		else ns = PTCHL_D;
-
-		PTCHH: begin cmd = 16'hA3xx; wrt = 1; ns = PTCHH_D; end
-		PTCHH_D: if (done) begin ptchhw=1; ns = AZL;end 		else ns = PTCHH_D;		
+		AZL: 		if (done) begin azlw = 1; cmd = 16'hADxx; wrt = 1; ns = AZH; end 		else ns = AZL;
 		
-		AZL:   begin cmd = 16'hACxx; wrt = 1; ns = AZL_D; end
-		AZL_D: if (done) begin azlw = 1; ns = AZH; end 		else ns = AZL_D;
-		
-		AZH:   begin cmd = 16'hADxx; wrt = 1; ns = AZH_D; end
-		AZH_D:  if (done) begin azhw = 1; ns = PTCHL; vldw = 1; end else ns = AZH_D;
-		default: ns = INIT1;
+		AZH:  		if (done) begin azhw = 1; ns = PTCHL; vldw = 1; end else ns = AZH;
+		default: 	ns = INIT1;
 // if done is high, I can write to the wrt and combine the states.
 
 	endcase
@@ -113,31 +107,5 @@ SPI_mstr16 inst_SPI (.clk(clk),.rst_n(rst_n),.SS_n(SS_n),.SCLK(SCLK),.MISO(MISO)
 inertial_integrator inst_inert_integrator (.clk(clk), .rst_n(rst_n), .vld(vldw ), .ptch_rt(ptch_rt), .AZ(az), .ptch(ptch));
 
 	   
-	   
-	   
-	     //////////////////////////////////////////////////|
-  //  //                                  ||
-  //    ///////////////////////////////////////////////////
-  //
-  //    // I/O Ports for Master
-  //      input clk,rst_n;			// clock and active low asynch
-  //      reset
-  //      output reg SS_n;				// active low slave
-  //        select , since getting driven from always block hence reg type
-  //      output SCLK;				// Serial clock
-  //      output MOSI;				// serial data out
-  //            from master
-  //      input MISO;				// serial data in to
-  //              master
-  //      input [15:0] cmd;	// parallel data to be loaded to SPI
-  //                maaster to be transmitted
-  //      output reg done;		//Asserted when SPI
-  //                  transaction is complete. Should stay asserted till next
-  //                  wrt  
-  //      output [15:0] rd_data;	// Data from SPI slave.
-  //                      
-  //      input wrt; 			//A high for 1 clock
-  //                        period would initiate a SPI transaction
-  //
 
 endmodule

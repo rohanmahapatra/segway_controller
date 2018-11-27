@@ -30,12 +30,12 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   /////////////////////////////////////////////////////////
   wire rst_n;                           // internal global reset that goes to all units
   
-  logic pwr_up_w;	// needed in authentication block
-  logic nxt_w;		// needed in A2D interface and digital core drives these	
-  logic [11:0] lft_ld_w, rght_ld_w, batt_w;
-  logic [10:0] lft_spd_w, rght_spd_w; // for mtr_drv
-  logic lft_rev, rght_rev;
-  logic audio_o_w, audio_o_n_w, moving_w, ovr_spd_w, batt_low_w; // in piezo friver from digital core
+  wire pwr_up_w;	// needed in authentication block
+  wire nxt_w;		// needed in A2D interface and digital core drives these	
+  wire [11:0] lft_ld_w, rght_ld_w, batt_w;
+  wire [10:0] lft_spd_w, rght_spd_w; // for mtr_drv
+  wire lft_rev, rght_rev;
+  wire audio_o_w, audio_o_n_w, moving_w, ovr_spd_w, batt_low_w; // in piezo friver from digital core
 
   /////////////////////////////////////
   // Instantiate reset synchronizer //
@@ -52,7 +52,8 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   // A2D Interface //
   /////////////////////////////////////
   //to connect - nxt comes from digital core 
-  A2D_Intf i_A2D_intf (.clk(clk), .rst_n(rst_n), .nxt(nxt)_w, .lft_ld(lft_ld_w), .rght_ld(rght_ld_w), .batt(batt_w), .SS_n(A2D_SS_n), .SCLK(A2D_SCLK), .MOSI(A2D_MOSI), .MISO(A2D_MISO));
+  A2D_Intf i_A2D_intf ( .clk(clk), .rst_n(rst_n), .nxt(nxt_w), .lft_ld(lft_ld_w), .rght_ld(rght_ld_w), .batt(batt_w), 
+			.SS_n(A2D_SS_n), .SCLK(A2D_SCLK), .MOSI(A2D_MOSI), .MISO(A2D_MISO));
   
   /////////////////////////////////////
   // Digital Core //
@@ -67,14 +68,14 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   // Piezo Driver //
   /////////////////////////////////////
  
-  piezo_drv (.clk(clk), .rst_n(rst_n), .moving(moving_w), .ovr_spd(ovr_spd_w), .batt_low(batt_low_w), .audio_o(audio_o_w), .audio_o_n(audio_o_n_w));
+  piezo_drv i_peizo_drv (.clk(clk), .rst_n(rst_n), .moving(moving_w), .ovr_spd(ovr_spd_w), .batt_low(batt_low_w), .audio_o(audio_o_w), .audio_o_n(audio_o_n_w));
 
   /////////////////////////////////////
   // MTR_DRV //
   /////////////////////////////////////
   
   // lft_spd etc coming from digital core
-  mtr_drv (.clk(clk, .rst_n(rst_n), .lft_spd(lft_spd_w), .lft_rev(lft_rev_w), .PWM_rev_lft(PWM_rev_lft), .PWM_frwrd_lft(PWM_frwrd_lft), 
+  mtr_drv i_mtr_drv (.clk(clk), .rst_n(rst_n), .lft_spd(lft_spd_w), .lft_rev(lft_rev_w), .PWM_rev_lft(PWM_rev_lft), .PWM_frwrd_lft(PWM_frwrd_lft), 
 	 .rght_spd(rght_spd), .rght_rev(rght_rev), .PWM_rev_rght(PWM_rev_rght), .PWM_frwrd_rght(PWM_frwrd_rght));
   
 

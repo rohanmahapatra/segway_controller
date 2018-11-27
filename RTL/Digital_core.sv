@@ -25,7 +25,7 @@ input clk, rst_n;	// clk and async rst signal
 //************* Wires, Regs & Logics*********************//
 //*******************************************************//
 
-logic rider_off_w. en_steer_w, vld_w;
+logic rider_off_w, en_steer_w, vld_w;
 logic [15:0] ptch_w;
 logic [11:0] ld_cell_diff_w;
 
@@ -50,7 +50,10 @@ inert_intr i_inert_intr (.clk(clk), .rst_n(rst_n), .vld(vld_w), .ptch(ptch_w), .
 // vld, ptch, SS_n, MOSI, SCLK -output ; MISO,INT - input
 
  
-balance_cntrl i_balance_cntr (.clk(clk), .rst_n(rst_n),.vld(vld_w),.ptch(ptch_w),.ld_cell_diff(),.lft_spd(lft_spd),.lft_rev(lft_rev),
+balance_cntrl i_balance_cntr (.clk(clk), .rst_n(rst_n),.vld(vld_w),.ptch(ptch_w),.ld_cell_diff(ld_cell_diff_w),.lft_spd(lft_spd),.lft_rev(lft_rev),
 		              .rght_spd(rght_spd),.rght_rev(rght_rev),.rider_off(rider_off_w), .en_steer(en_steer_w));
 // vld, rider_off, en_steer - input ; ptch, ld_cell_diff - signed input;
 // lft_spd, rght_spd, lft_rev, rght_rev - output
+
+
+endmodule

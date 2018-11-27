@@ -15,49 +15,16 @@
 # Loading project ex21
 # reading /cae/apps/data/mentor-2017/questasim/v10.6_1/linux_x86_64/../modelsim.ini
 # Loading project pt1
-# Compile of A2D_Intf.sv failed with 3 errors.
-# Compile of Auth_blk.sv was successful.
-# Compile of Digital_core.sv failed with 2 errors.
-# Compile of inert_intf.sv failed with 11 errors.
-# Compile of inertial_integrator.sv was successful.
-# Compile of mtr_drv.sv was successful.
-# Compile of piezo_drv.sv failed with 2 errors.
-# Compile of PWM_11.sv was successful.
-# Compile of rst_synch.sv was successful.
-# Compile of Segway.v failed with 3 errors.
-# Compile of SPI_mstr16-1.sv was successful.
-# Compile of steer_en.sv failed with 2 errors.
-# 12 compiles, 6 failed with 23 errors.
-# Compile of A2D_Intf.sv failed with 1 errors.
-# Compile of A2D_Intf.sv failed with 20 errors.
 # Compile of A2D_Intf.sv was successful.
 # Compile of Auth_blk.sv was successful.
-# Compile of Digital_core.sv failed with 2 errors.
-# Compile of inert_intf.sv failed with 11 errors.
-# Compile of inertial_integrator.sv was successful.
-# Compile of mtr_drv.sv was successful.
-# Compile of piezo_drv.sv failed with 2 errors.
-# Compile of PWM_11.sv was successful.
-# Compile of rst_synch.sv was successful.
-# Compile of Segway.v failed with 3 errors.
-# Compile of SPI_mstr16-1.sv was successful.
-# Compile of steer_en.sv failed with 2 errors.
-# Compile of A2D_Intf.sv was successful.
-# 12 compiles, 5 failed with 20 errors.
-# Compile of steer_en.sv was successful.
-# Compile of Segway.v failed with 2 errors.
-# Compile of Segway.v was successful.
-# Compile of piezo_drv.sv failed with 2 errors.
-# Compile of piezo_drv.sv failed with 2 errors.
-# Compile of piezo_drv.sv was successful.
-# Compile of Digital_core.sv failed with 2 errors.
 # Compile of Digital_core.sv was successful.
-# Compile of inert_intf.sv failed with 11 errors.
-# Compile of inert_intf.sv failed with 7 errors.
+# Compile of inert_intf.sv failed with 4 errors.
+# Compile of inertial_integrator.sv was successful.
+# Compile of mtr_drv.sv was successful.
+# Compile of piezo_drv.sv was successful.
+# Compile of PWM_11.sv was successful.
+# Compile of rst_synch.sv was successful.
+# Compile of Segway.v was successful.
 # Compile of SPI_mstr16-1.sv was successful.
-# Compile of inert_intf.sv failed with 5 errors.
-# Compile of inert_intf.sv failed with 5 errors.
-# Compile of inert_intf.sv failed with 5 errors.
-# Compile of inert_intf.sv failed with 5 errors.
-# Compile of inert_intf.sv failed with 4 errors.
-# Compile of inert_intf.sv failed with 4 errors.
+# Compile of steer_en.sv was successful.
+# 12 compiles, 1 failed with 4 errors.

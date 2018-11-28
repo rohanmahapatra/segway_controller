@@ -19,7 +19,7 @@ state_t nxt_STATE, STATE;
 /////////////////////////////////// UART RX instantiation /////////////////////////////////////////////////////////////////
 
 
-UART_rcv rx(.clk(clk), .rst_n(rst_n), .RX(RX), .rdy(rdy), .rx_data(rx_data), .clr_rdy(clr_rdy));
+UART_rcv rx(.clk(clk), .rst_n(rst_n), .RX(RX), .rdy(rdy), .cmd(rx_data), .clr_rdy(clr_rdy));
  
 
 //////////////////////////////////// State change flip flop ///////////////////////////////////////////////////////////////

@@ -75,7 +75,7 @@ always_comb begin
 	case (ps)
          	INIT1: 		if (&timer) begin cmd = 16'h0D02; ns = INIT2; wrt = 1; end
 		INIT2: 		if (&timer[9:0]) begin cmd =16'h1053 ; ns = INIT3; wrt = 1; end else  ns = INIT2;
-		INIT3: 		if (&timer[9:0]) begin cmd =16'h1050 ; ns = INIT4; wrt = 1; end else ns = INIT3;
+		INIT3: 		if (&timer[9:0]) begin cmd =16'h1150 ; ns = INIT4; wrt = 1; end else ns = INIT3;
 		INIT4: 		if (&timer[9:0]) begin cmd =16'h1460 ; ns = PTCHL_INIT; wrt = 1; end else ns = INIT4;
 		PTCHL_INIT: 	if (int_ff2==1) begin cmd = 16'hA2xx; wrt = 1; ns =PTCHL; end else ns = PTCHL_INIT;
 		PTCHL: 		if(done) begin ptchlw = 1; cmd = 16'hA3xx; wrt = 1; ns = PTCHH;  end 		else ns = PTCHL;

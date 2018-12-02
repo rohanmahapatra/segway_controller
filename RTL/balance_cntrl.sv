@@ -81,7 +81,7 @@ module balance_cntrl(clk,rst_n,vld,ptch,ld_cell_diff,lft_spd,lft_rev,
 
 // if rider is off, integrator term should be 0 
  
-  assign integrator_reg_input = rider_off ? 18'h00000 : ((vld && ~ov) ? sum_I_term : integrator_reg);
+	assign integrator_reg_input = (rider_off || !pwr_up) ? 18'h00000 : ((vld && ~ov) ? sum_I_term : integrator_reg);
   always @(posedge clk, negedge rst_n) begin				// FF to accumulate 
   if (!rst_n)
 	integrator_reg <= 18'h00000;

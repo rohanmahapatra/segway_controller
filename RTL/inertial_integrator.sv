@@ -49,8 +49,8 @@ assign AZ_comp = AZ - AZ_OFFSET;
 
 always_comb begin
   if (ptch_acc > ptch)		// if pitch calculated from accel> pitch calculated from gyro
-	fusion_ptch_offset= 27'h0000200;
+	fusion_ptch_offset= 27'h0000400;
   else
-	fusion_ptch_offset= 27'h7fffE00;
+	fusion_ptch_offset= 27'h7fffC00;
 end
 endmodule

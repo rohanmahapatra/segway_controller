@@ -19,7 +19,7 @@ module steer_en(clk,rst_n,lft_ld, rght_ld,ld_cell_diff,en_steer,rider_off);
   
 reg [25:0] count;
 
-localparam MIN_RIDER_WEIGHT = 100;	// to be updated - error
+localparam MIN_RIDER_WEIGHT = 12'h200;	// to be updated - error
 
 // code begins
 //

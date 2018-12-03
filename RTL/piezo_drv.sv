@@ -11,7 +11,8 @@ localparam BATT_LOW_THRESHOLD = 'h800;
 
 wire clk_sec;
 
-reg clk_1Hz = 1'b0;
+//reg clk_1Hz;
+//assign clk_1Hz = 1'b0;
 reg [28:0] counter;	// 28 bits for 1 Hz and 29 bits for 0.5 hz
 
 always@(posedge clk, negedge rst_n)	begin

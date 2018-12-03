@@ -29,7 +29,7 @@ logic rider_off_w, en_steer_w, vld_w;
 logic [15:0] ptch_w;
 logic [11:0] ld_cell_diff_w;
 
-
+reg [18:0] cnt_val;
 //******************** Submodules ***********************//
 //*******************************************************//
 
@@ -55,5 +55,17 @@ balance_cntrl i_balance_cntr (.clk(clk), .rst_n(rst_n),.vld(vld_w),.ptch(ptch_w)
 // vld, rider_off, en_steer - input ; ptch, ld_cell_diff - signed input;
 // lft_spd, rght_spd, lft_rev, rght_rev - output
 
+
+
+
+always @ (posedge clk, negedge rst_n) begin
+	if (!rst_n)
+		cnt_val <= 0;
+	else
+		cnt_val <= cnt_val + 1;
+end
+
+
+assign nxt = (&cnt_val) ? 1 : 0;
 
 endmodule

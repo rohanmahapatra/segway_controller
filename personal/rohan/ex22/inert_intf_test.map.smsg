@@ -1,0 +1,6 @@
+Info (10281): Verilog HDL Declaration information at inert_intf_test.sv(3): object "RST_n" differs only in case from object "rst_n" in the same scope File: I:/ece551/ex22/inert_intf_test.sv Line: 3
+Info (10281): Verilog HDL Declaration information at inert_intf.sv(34): object "ptchl" differs only in case from object "PTCHL" in the same scope File: I:/ece551/ex22/inert_intf.sv Line: 34
+Info (10281): Verilog HDL Declaration information at inert_intf.sv(34): object "ptchh" differs only in case from object "PTCHH" in the same scope File: I:/ece551/ex22/inert_intf.sv Line: 34
+Info (10281): Verilog HDL Declaration information at inert_intf.sv(34): object "azl" differs only in case from object "AZL" in the same scope File: I:/ece551/ex22/inert_intf.sv Line: 34
+Info (10281): Verilog HDL Declaration information at inert_intf.sv(34): object "azh" differs only in case from object "AZH" in the same scope File: I:/ece551/ex22/inert_intf.sv Line: 34
+Info (10281): Verilog HDL Declaration information at reset_synch.sv(4): object "RST_n" differs only in case from object "rst_n" in the same scope File: I:/ece551/ex22/reset_synch.sv Line: 4

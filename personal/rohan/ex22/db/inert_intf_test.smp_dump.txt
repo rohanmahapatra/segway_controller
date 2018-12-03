@@ -1,0 +1,19 @@
+
+State Machine - |inert_intf_test|inert_intf:i_inert_intf|ps
+Name ps.AZL ps.PTCHH ps.PTCHL_INIT ps.PTCHL ps.INIT4 ps.INIT3 ps.INIT2 ps.INIT1 ps.AZH 
+ps.INIT1 0 0 0 0 0 0 0 0 0 
+ps.INIT2 0 0 0 0 0 0 1 1 0 
+ps.INIT3 0 0 0 0 0 1 0 1 0 
+ps.INIT4 0 0 0 0 1 0 0 1 0 
+ps.PTCHL 0 0 0 1 0 0 0 1 0 
+ps.PTCHL_INIT 0 0 1 0 0 0 0 1 0 
+ps.PTCHH 0 1 0 0 0 0 0 1 0 
+ps.AZL 1 0 0 0 0 0 0 1 0 
+ps.AZH 0 0 0 0 0 0 0 1 1 
+
+State Machine - |inert_intf_test|inert_intf:i_inert_intf|SPI_mstr16:inst_SPI|state
+Name state.WAIT state.WAIT_1 state.SHIFT state.IDLE 
+state.IDLE 0 0 0 0 
+state.SHIFT 0 0 1 1 
+state.WAIT_1 0 1 0 1 
+state.WAIT 1 0 0 1 

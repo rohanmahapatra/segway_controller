@@ -1,0 +1,47 @@
+# //  Questa Sim-64
+# //  Version 10.6a linux_x86_64 Mar 16 2017
+# //
+# //  Copyright 1991-2017 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Project file /userspace/r/rmahapatra/ece551/project/nov_26/RTL/t1/t1.mpf was not found.
+# Unable to open project.
+# Loading project ex22
+# 0 compiles, 7 failed with no errors.
+# Compile of inert_intf.sv was successful.
+# Compile of inert_intf_tb.v was successful.
+# Compile of inert_intf_test.sv was successful.
+# Compile of inertial_integrator.sv was successful.
+# Compile of reset_synch.sv was successful.
+# Compile of SegwayModel.sv was successful.
+# Compile of SPI_mstr16.sv was successful.
+# 7 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.inert_intf_tb
+# vsim -voptargs="+acc" work.inert_intf_tb 
+# Start time: 15:35:14 on Nov 30,2018
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Note: (vopt-143) Recognized 1 FSM in module "SegwayModel(fast)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "SPI_mstr16(fast)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "inert_intf(fast)".
+# Loading work.inert_intf_tb(fast)
+# Loading sv_std.std
+# Loading work.inert_intf(fast)
+# Loading work.SPI_mstr16(fast)
+# Loading work.inertial_integrator(fast)
+# Loading work.SegwayModel(fast)
+# ** Warning: (vsim-3015) /userspace/r/rmahapatra/ece551/ex22/inert_intf_tb.v(19): [PCDPC] - Port size (14) does not match connection size (16) for port 'rider_lean'. The port definition is at: /userspace/r/rmahapatra/ece551/ex22/SegwayModel.sv(2).
+#    Time: 0 ns  Iteration: 0  Instance: /inert_intf_tb/inst_segwaymodel File: /userspace/r/rmahapatra/ece551/ex22/SegwayModel.sv
+add wave -position insertpoint sim:/inert_intf_tb/inst_inert_intf/*
+add wave -position insertpoint sim:/inert_intf_tb/inst_segwaymodel/*
+run -all
+# ** Note: $stop    : /userspace/r/rmahapatra/ece551/ex22/inert_intf_tb.v(51)
+#    Time: 2000015 ns  Iteration: 1  Instance: /inert_intf_tb
+# Break in Module inert_intf_tb at /userspace/r/rmahapatra/ece551/ex22/inert_intf_tb.v line 51

@@ -1,0 +1,19 @@
+Segway Tests
+
+- Make sure integral term in balance_cntrl gets reset when pwr_up is asserted
+    - From BadBehaviorSegway.mp4
+
+A2D Converter
+    - Batt
+        - Tested as part of the piezo driver
+    - Cells
+        - Check that the load cell values assert/deassert rider_off
+
+Piezo
+    - Check that low value causes batt_low to assert
+        - low_batt threshold is 0x800
+    - Check that batt_low and ovr_spd can occur at same time
+    - moving "normal mode" should occur once every 2 seconds
+	
+
+Don't look at specific mtr_drv values, but check direction and speed to get a sense of what is going on.

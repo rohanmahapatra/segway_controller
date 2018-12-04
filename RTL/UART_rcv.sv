@@ -1,183 +1,141 @@
-module UART_rcv(clk, rst_n, RX, clr_rdy, cmd, rdy);
+module UART_rcv (clk, rst_n, RX, clr_rdy, rx_data, rdy);
 
-// ****** I/O Ports *******
-input clk,rst_n; 	// 50MHz systemclock & active low reset
-input RX; 		// Serialdata input
-input clr_rdy; 		// Knocks down rdy when asserted
-//output [7:0] rx_data;	//out Byte received
-output rdy; 		//out Asserted when byte received. Stays high till start bit of next byte starts, or until clr_rdyasserted.
+//
+// Locals
+//
+localparam CLK_CYCLE = 12'hA2C;
+localparam HALF_CLK_CYCLE = 12'h512;
+localparam RCV_DONE = 4'hA;
 
-// ******* Internal Wires/Regs ******
+//
+// Inputs/Outputs
+//
+input clk, rst_n, RX, clr_rdy;
+output [7:0] rx_data;
+output logic rdy;
 
-reg clr_busy; 
-reg busy, ready;
-output reg [7:0] cmd;
-reg [9:0] shift_reg;
-reg rx_meta_in1, rx_meta_in2;
+//
+// Internal Signals
+//
+typedef enum reg {IDLE, RCV} state_t;
 
-logic receiving, start, shift;
-logic [3:0] bit_cnt;
-logic [12:0] baud_cnt; 	// we need 12 bits but for 1st RX bit we need to wait for 1.5 times.
-logic set_rdy;
-//parameter baud = ;
+logic stable_ff, RX_stable;	// Meta-stable RX data from RX input
+logic [3:0] bit_cnt;		// Increments after each bit is receieved
+logic [11:0] baud_cnt;		// Holds data in receive for 2604 clk cycles
+logic [8:0] rx_shft_reg;	// Received data from RX
+wire shift;			// shift signal
+state_t state, nxt_state;	// State machine
+logic set_rdy, start, receiving;	// state machine outputs
+wire rdy_rst;
 
-typedef enum reg[1:0] {IDLE, WAIT, SHIFT} state_t;
-state_t state, nxt_state;
- 
-// logic to synchronize the incoming RX signal to avoid metastability
-always @(posedge clk, negedge rst_n) begin
-		if (!rst_n) begin
-			rx_meta_in1 <= 0;	// could have been 1 but we have another signal to detect any incoming data.
-			rx_meta_in2 <= 0;
-		end
-		else begin
-			rx_meta_in1 <= RX;
-			rx_meta_in2 <= rx_meta_in1;
-		end	
+// Assert shift when baud_cnt finishes counting down
+assign shift = (baud_cnt == 0) ? 1'b1 : 1'b0;
+
+assign rx_data = rx_shft_reg[7:0];
+
+// Both start and clr_rdy can deassert rdy
+assign rdy_rst = start | clr_rdy;
+
+// Double flop RX data in for meta-stability
+always_ff @ (posedge clk, negedge rst_n) begin
+	if (!rst_n) begin
+		RX_stable <= 1'b1;
+		stable_ff <= 1'b1;
+	end else begin
+		stable_ff <= RX;
+		RX_stable <= stable_ff;
 	end
-
-
-// counter to count the baud rate. We have baud of 19,200 with 50Mhz clock so we need 12 bits (log base 2 of 2064 )
-	always @(posedge clk, negedge rst_n) begin
-		if(!rst_n)
-			baud_cnt <= 0;
-		else
-			casex({shift, receiving})
-				2'b0_0: baud_cnt <= baud_cnt;
-				2'b0_1: baud_cnt <= baud_cnt + 1;
-				2'b1_x: baud_cnt <= 0;
-			endcase
-	end
-
-// counter to count the bits received
-	always @(posedge clk, negedge rst_n) begin
-		if(!rst_n)
-			bit_cnt <= 0;
-		else
-			casex({start, shift})
-				2'b0_0: bit_cnt <= bit_cnt;
-				2'b0_1: bit_cnt <= bit_cnt + 1;
-				2'b1_x: bit_cnt <= 0;
-				default: bit_cnt <= 0;
-			endcase
-	end
-	
-	
-	// shift logic since receiver is a bit complex 
-	always_comb begin
-		// Wait for 1.5 cycles when receiving the 1st bit i.,e when line becomes low
-		if(bit_cnt == 0) 	// to detect the 1st bit
-			if(baud_cnt == 3906)
-				shift = 1;
-			else	
-				shift = 0;
-		// Wait for 1 cycle
-		else
-			if(baud_cnt == 2604)
-				shift = 1;
-			else
-				shift = 0;
-	end	
-	
-	// rotater for rx shift reg
-	always @(posedge clk, negedge rst_n) begin
-		if(!rst_n)
-			shift_reg <= 0;
-		else	
-			casex(shift)
-				1'b0: shift_reg <= shift_reg;
-				1'b1: shift_reg <= {RX, shift_reg[9:1]};
-			endcase			
-	end
-	
-	// cmd logic
-	always @(posedge clk, negedge rst_n) begin
-		if(!rst_n)
-			cmd <= 0;
-		else
-			casex(bit_cnt)
-				9: cmd <= shift_reg[8:1];
-				default: cmd <= cmd;
-			endcase
-	end
-	
-	// logic to detect if receiver is busy and control the state machine
-	always @(posedge clk, negedge rst_n) begin
-		if(!rst_n)
-			busy <= 0;
-		else if(rx_meta_in2 & !rx_meta_in1)
-			busy <= 1;
-		else if (clr_busy)
-			busy <= 0;
-		else
-			busy <= busy;
-	end
-	
-	
-	
-	// set ready and clear ready generation
-	always @(posedge clk, negedge rst_n) begin
-		if (!rst_n)
-			ready <= 0;
-		else if(clr_rdy)
-			ready <= 0;
-		else if(set_rdy)
-			ready <= 1;
-		else
-			ready <= ready;
-	end
-	
-
-// state machine
-// sequential logic to assign next state
-always_ff @(posedge clk, negedge rst_n) begin
-		if(!rst_n)
-			state <= IDLE;
-		else
-			state <= nxt_state;
 end
 
-// combinational logic
-	always_comb begin
-		nxt_state = IDLE;
-		receiving = 0;
-		clr_busy = 0;
-		start = 0;
-		set_rdy = 0;
-		case(state)
-			IDLE: begin
-				if(busy) begin
-					nxt_state = WAIT;
-					start = 1;
-					receiving = 1;
-				end
-				else begin
-					nxt_state = IDLE;
-				end
-			end
-			WAIT: begin
-				if(shift) begin
-					nxt_state = SHIFT;
-				end
-				else begin
-					nxt_state = WAIT;
-					receiving = 1;
-				end
-			end
-			SHIFT: begin
-				if(bit_cnt < 9) begin
-					nxt_state = WAIT;
-					receiving = 1;
-				end
-				else begin
-					nxt_state = IDLE;
-					set_rdy = 1;
-					clr_busy = 1;
-				end
-			end
+// Receive data for 2604 clk cycles
+// Shifts data every 2604 clk cycles after an initial shift of 2604/2.
+// This ensures the data is received in the middle of a trasmit cycle.
+always_ff @ (posedge clk) begin
+	if (start == 1)
+		baud_cnt <= HALF_CLK_CYCLE;
+	else if (shift == 1)
+		baud_cnt <= CLK_CYCLE;
+	else if (receiving == 1)
+		baud_cnt <= baud_cnt - 1'b1;
+	else 
+		baud_cnt <= baud_cnt;
+end
+
+// receive complete counter
+always_ff @ (posedge clk) begin
+	if (start == 1)
+		bit_cnt <= 4'h0;
+	else if (shift == 1)
+		bit_cnt <= bit_cnt + 1'b1;
+	else
+		bit_cnt <= bit_cnt;
+end
+
+// receive register 
+always_ff @ (posedge clk) begin
+	if (shift == 1)
+		rx_shft_reg <= {RX_stable, rx_shft_reg[8:1]};
+	else
+		rx_shft_reg <= rx_shft_reg;
+end
+
+// Receive Done flop 
+// flop type: Set Reset
+always_ff @ (posedge clk, negedge rst_n) begin
+	if(!rst_n)
+		rdy <= 1'b0;
+	else begin
+		case({set_rdy, rdy_rst})
+			{1'b0, 1'b0}: begin rdy <= rdy; end
+			{1'b0, 1'b1}: begin rdy <= 1'b0; end
+			{1'b1, 1'b0}: begin rdy <= 1'b1; end
+			{1'b1, 1'b1}: begin rdy <= 1'b0; end
 		endcase
 	end
+end
 
+// State machine
+always_ff @ (posedge clk, negedge rst_n) begin
 
+	if(!rst_n)
+		state <= IDLE;
+	else
+		state <= nxt_state;
+end
+
+// State machine logic
+always_comb begin
+	//default outputs
+	start = 0;
+	receiving = 0;
+	set_rdy = 1;
+	nxt_state = IDLE;
+
+	case (state)
+		RCV: if(bit_cnt == RCV_DONE) begin
+			start = 0;
+			receiving = 0;
+			set_rdy = 1;
+			nxt_state = IDLE;
+		end else begin
+			start = 0;
+			receiving = 1;
+			set_rdy = 0;
+			nxt_state = RCV;
+		end
+		// default case = IDLE
+		default: if (!RX_stable) begin
+			start = 1;
+			receiving = 0;
+			set_rdy = 0;
+			nxt_state = RCV;
+		end else begin
+			start = 0;
+			receiving = 0;
+			set_rdy = 0;
+			nxt_state = IDLE;
+		end
+	endcase
+end
 
 endmodule

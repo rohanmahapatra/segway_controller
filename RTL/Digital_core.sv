@@ -1,4 +1,4 @@
-module Digital_core(clk,rst_n,pwr_up,whl_spd_lft,whl_spd_rght, lft_ld, rght_ld, batt, nxt, lft_spd, rght_spd, lft_rev, rght_rev, moving, ovr_spd, batt_low, SS_n, SCLK, MOSI, MISO, INT);
+module Digital_core(clk,rst_n,pwr_up,whl_spd_lft,whl_spd_rght, lft_ld, rght_ld, batt, nxt, lft_spd, rght_spd, lft_rev, rght_rev, moving, ovr_spd, batt_low, SS_n, SCLK, MOSI, MISO, INT, rider_off_w);
 
 
 
@@ -15,7 +15,7 @@ output lft_rev;
 output rght_rev;
 
 output moving, ovr_spd, batt_low;	// to piezo drv
-
+output logic rider_off_w;
 output SS_n, SCLK, MOSI;	// from and to inertial sensor
 input MISO, INT; 
 

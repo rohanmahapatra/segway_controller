@@ -37,6 +37,7 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   wire [10:0] rght_spd_w; // for mtr_drv
   wire lft_rev, rght_rev;
   wire audio_o_w, audio_o_n_w, moving_w, ovr_spd_w, batt_low_w; // in piezo friver from digital core
+  wire rider_off_w; 
 
   /////////////////////////////////////
   // Instantiate reset synchronizer //
@@ -47,7 +48,7 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   // Authentication Block //
   /////////////////////////////////////
   
-  Auth_blk i_Auth_blk (.clk(clk), .rst_n(rst_n), .pwr_up(pwr_up_w), .RX(RX), .rider_off() ); // connect rider_off
+  Auth_blk i_Auth_blk (.clk(clk), .rst_n(rst_n), .pwr_up(pwr_up_w), .RX(RX), .rider_off(rider_off_w) ); // connect rider_off
   
   /////////////////////////////////////
   // A2D Interface //
@@ -63,7 +64,7 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   Digital_core i_Digital_core    (.clk(clk),.rst_n(rst_n),.pwr_up(pwr_up_w),.whl_spd_lft(), 		// ask Prof where is this coming form
 				.whl_spd_rght(), .lft_ld(lft_ld_w), .rght_ld(rght_ld_w), .batt(batt_w), .nxt(nxt_w), .lft_spd(lft_spd_w), .rght_spd(rght_spd_w), 
 				.lft_rev(lft_rev_w), .rght_rev(rght_rev_w), .moving(moving_W), .ovr_spd(ovr_spd_w), .batt_low(batt_low_w), 
-				.SS_n(INERT_SS_n), .SCLK(INERT_SCLK), .MOSI(INERT_MOSI), .MISO(INERT_MISO), .INT(INT));
+				.SS_n(INERT_SS_n), .SCLK(INERT_SCLK), .MOSI(INERT_MOSI), .MISO(INERT_MISO), .INT(INT), .rider_off_w(rider_off_w));
   
   /////////////////////////////////////
   // Piezo Driver //
@@ -82,4 +83,3 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
 
 
 endmodule
-

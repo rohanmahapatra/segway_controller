@@ -16,7 +16,7 @@ output lft_rev;
 output rght_rev;
 
 output moving, ovr_spd, batt_low;	// to piezo drv
-output logic rider_off_w;
+output rider_off_w;
 output SS_n, SCLK, MOSI;	// from and to inertial sensor
 input MISO, INT;
 

@@ -17,7 +17,7 @@ output rght_rev;
 output moving, ovr_spd, batt_low;	// to piezo drv
 output logic rider_off_w;
 output SS_n, SCLK, MOSI;	// from and to inertial sensor
-input MISO, INT; 
+input MISO, INT;
 
 input clk, rst_n;	// clk and async rst signal
 
@@ -45,15 +45,15 @@ reg [18:0] cnt_val;
 
 
 
-steer_en i_steer_en(.clk(clk), .rst_n(rst_n), .lft_ld(lft_ld),.rght_ld(rght_ld), .ld_cell_diff(ld_cell_diff_w), .en_steer(en_steer_w), .rider_off(rider_off_w) ); 
+steer_en i_steer_en(.clk(clk), .rst_n(rst_n), .lft_ld(lft_ld),.rght_ld(rght_ld), .ld_cell_diff(ld_cell_diff_w), .en_steer(en_steer_w), .rider_off(rider_off_w) );
 // lft_ld, rght_ld - input ; ld_cell_diff, en_steer, rider_off - output
 
-inert_intf i_inert_intr (.clk(clk), .rst_n(rst_n), .vld(vld_w), .ptch(ptch_w), .MOSI(MOSI), .SCLK(SS_n), .MISO(MISO), .INT(INT));  
+inert_intf i_inert_intr (.clk(clk), .rst_n(rst_n), .vld(vld_w), .ptch(ptch_w), .SS_n(SS_n), .MOSI(MOSI), .SCLK(SCLK), .MISO(MISO), .INT(INT));
 // vld, ptch, SS_n, MOSI, SCLK -output ; MISO,INT - input
 
- 
+
 balance_cntrl i_balance_cntr (.clk(clk), .rst_n(rst_n),.vld(vld_w),.ptch(ptch_w),.ld_cell_diff(ld_cell_diff_w),.lft_spd(lft_spd),.lft_rev(lft_rev),
-		              .rght_spd(rght_spd),.rght_rev(rght_rev),.rider_off(rider_off_w), .en_steer(en_steer_w));
+		              .rght_spd(rght_spd),.rght_rev(rght_rev),.rider_off(rider_off_w), .en_steer(en_steer_w), .pwr_up(pwr_up), .too_fast(ovr_spd));
 // vld, rider_off, en_steer - input ; ptch, ld_cell_diff - signed input;
 // lft_spd, rght_spd, lft_rev, rght_rev - output
 

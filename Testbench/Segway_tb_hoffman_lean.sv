@@ -50,11 +50,6 @@ module Segway_tb();
 				.INT(INT),.PWM_rev_rght(PWM_rev_rght),.PWM_frwrd_rght(PWM_frwrd_rght),
 				.PWM_rev_lft(PWM_rev_lft),.PWM_frwrd_lft(PWM_frwrd_lft),
 				.piezo_n(piezo_n),.piezo(piezo),.RX(RX_TX));
-	
-
-		 reg signed [15:0] omega_platform;						// angular velocity of platform
-
-  reg signed [15:0] theta_platform;						// angular position of platform
 
   
 	//// Instantiate UART_tx (mimics command from BLE module) //////
@@ -70,12 +65,20 @@ module Segway_tb();
 		////// Start issuing commands to DUT //////
 		//Turn on the Segway
 		SendCmd(8'h67);
+		SendA2D(11'h205,11'h205, 11'h0FF);
+		repeat(65000000) @(posedge clk);
 
 		// TEST 1: batt_low sound should assert (no lean, no lean on loadcells, and battery = 0x0FF)//
 	  	SendA2D(11'h205,11'h205, 11'h0FF);
 		SetLean(14'h1FFF);
 		repeat(1000000) @(posedge clk);
-	  	if (iDUT.SegwayModel.theta_platform < 500) begin
+	  	if (iPHYS.theta_platform < 500) begin
+			$display("FAIL 1: Piezo Did not indicate low battery?");
+		end
+
+		SetLean(14'h0000);
+		repeat(1000000) @(posedge clk);
+	  	if (iPHYS.theta_platform < 500) begin
 			$display("FAIL 1: Piezo Did not indicate low battery?");
 		end
 

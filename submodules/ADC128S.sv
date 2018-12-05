@@ -40,7 +40,7 @@ module ADC128S(clk,rst_n,SS_n,SCLK,MISO,MOSI, batt_set, lft_cell_set, rght_cell_
   // Instantiate SPI interface //
   //////////////////////////////
   SPI_ADC128S iSPI(.clk(clk),.rst_n(rst_n),.SS_n(SS_n),.SCLK(SCLK),.MISO(MISO),
-                 .MOSI(MOSI),.A2D_data(A2D_data),.cmd(cmd),.rdy(rdy));
+                 .MOSI(MOSI),.A2D_data({4'b000,value}),.cmd(cmd),.rdy(rdy));
 
 	  
   //// channel pointer ////	  

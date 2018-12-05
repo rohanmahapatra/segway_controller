@@ -96,6 +96,7 @@ initial begin
 	end
 
 	// Check that steering is disabled (must stay under min_rider_weight when setting cells)
+	// This condition should cause rider_off to go low
 	lft_cell_set = 12'h0F0;
 	rght_cell_set = 12'h100;
 	// Check that pwr is on. wheels should be equal (no steering)
@@ -107,7 +108,7 @@ initial begin
 	end
 
 	// Now enable steering and check that wheels move at different speeds
-	lft_cell_set = 12'h150;
+	lft_cell_set = 12'h110;
 	rght_cell_set = 12'h100;
 	rider_lean = 14'h0800;
 	repeat(300000) @(posedge clk);
@@ -118,8 +119,8 @@ initial begin
 	end
 
 	// Now make the load cells greater than 6.25% of each other. Steering should disable.
-	lft_cell_set = 12'h400;
-	rght_cell_set = 12'h100;
+	lft_cell_set = 12'h200;
+	rght_cell_set = 12'h004;
 	rider_lean = 14'h0800;
 	repeat(100000) @(posedge clk);
   	if (iDUT.i_Auth_blk.pwr_up != 1 || iPHYS.omega_lft != iPHYS.omega_rght) begin

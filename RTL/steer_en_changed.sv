@@ -19,7 +19,7 @@ module steer_en(clk,rst_n,lft_ld, rght_ld,ld_cell_diff,en_steer,rider_off);
   
 reg [25:0] count;
 
-localparam MIN_RIDER_WEIGHT = 12'h200;	// to be updated - error
+localparam MIN_RIDER_WEIGHT = 100;	// to be updated - error
 
 // code begins
 //
@@ -94,13 +94,13 @@ always_comb begin
 //assigning to reset values to avoid latches
 nxt_state = IDLE;
 clr_tmr = 1'b0; 
-rider_off = 1'b0;
+rider_off = 1'b1;
 en_steer = 1'b0; 
-case (state)
+case (STATE)
 	IDLE: if (sum_gt_min) begin  nxt_state = WAIT; clr_tmr = 1'b1; end 
 	      else nxt_state = IDLE;
 	WAIT: begin
-//		
+		rider_off = 1'b0;
 		if (sum_lt_min) begin nxt_state = IDLE; rider_off = 1'b1 ; end
 	        else if (diff_gt_1_4) begin
 			nxt_state = WAIT;
@@ -113,6 +113,7 @@ case (state)
        		else nxt_state = WAIT;				// shouldn't we assert clr_tmr = 1'b0 ????????????
 	       end
 	STEER_EN: begin
+		  rider_off = 1'b0;
 		  if (sum_lt_min) begin  nxt_state = IDLE; rider_off = 1'b1; end
 		  else if (diff_gt_15_16) begin nxt_state = WAIT; clr_tmr = 1'b1; end 
 		  else begin  nxt_state = STEER_EN; en_steer = 1'b1; end

@@ -27,7 +27,7 @@ input clk, rst_n;	// clk and async rst signal
 //************* Wires, Regs & Logics*********************//
 //*******************************************************//
 
-logic rider_off_w, en_steer_w, vld_w;
+logic en_steer_w, vld_w;
 logic [15:0] ptch_w;
 logic [11:0] ld_cell_diff_w;
 

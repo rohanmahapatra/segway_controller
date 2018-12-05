@@ -61,10 +61,10 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   // Digital Core //
   /////////////////////////////////////
 
-  Digital_core i_Digital_core    (.clk(clk),.rst_n(rst_n),.pwr_up(pwr_up_w),.whl_spd_lft(), 		// ask Prof where is this coming form
-				.whl_spd_rght(), .lft_ld(lft_ld_w), .rght_ld(rght_ld_w), .batt(batt_w), .nxt(nxt_w), .lft_spd(lft_spd_w), .rght_spd(rght_spd_w),
-				.lft_rev(lft_rev_w), .rght_rev(rght_rev_w), .moving(moving_w), .ovr_spd(ovr_spd_w), .batt_low(batt_low_w),
-				.SS_n(INERT_SS_n), .SCLK(INERT_SCLK), .MOSI(INERT_MOSI), .MISO(INERT_MISO), .INT(INT), .rider_off_w(rider_off_w));
+  Digital_core i_Digital_core	(.clk(clk), .rst_n(rst_n), .pwr_up(pwr_up_w), .lft_ld(lft_ld_w), .rght_ld(rght_ld_w), .batt(batt_w), .nxt(nxt_w), 
+				.lft_spd(lft_spd_w), .rght_spd(rght_spd_w), .lft_rev(lft_rev), .rght_rev(rght_rev), .moving(moving_w), 
+				.ovr_spd(ovr_spd_w), .batt_low(batt_low_w), .SS_n(INERT_SS_n), .SCLK(INERT_SCLK), .MOSI(INERT_MOSI), 
+				.MISO(INERT_MISO), .INT(INT), .rider_off_w(rider_off_w));
 
   /////////////////////////////////////
   // Piezo Driver //
@@ -77,7 +77,7 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   /////////////////////////////////////
 
   // lft_spd etc coming from digital core
-  mtr_drv i_mtr_drv (.clk(clk), .rst_n(rst_n), .lft_spd(lft_spd_w), .lft_rev(lft_rev_w), .PWM_rev_lft(PWM_rev_lft), .PWM_frwrd_lft(PWM_frwrd_lft),
+  mtr_drv i_mtr_drv (.clk(clk), .rst_n(rst_n), .lft_spd(lft_spd_w), .lft_rev(lft_rev), .PWM_rev_lft(PWM_rev_lft), .PWM_frwrd_lft(PWM_frwrd_lft),
 	 .rght_spd(rght_spd_w), .rght_rev(rght_rev), .PWM_rev_rght(PWM_rev_rght), .PWM_frwrd_rght(PWM_frwrd_rght));
 
 

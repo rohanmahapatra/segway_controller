@@ -76,49 +76,55 @@ initial begin
 	SendCmd(8'h67);
 
 	// Check that pwr is on. wheels should be equal (no steering)
-	repeat(10000) @(posedge clk);
+	rider_lean = 14'h0080;
+	repeat(100000) @(posedge clk);
   	if (iDUT.i_Auth_blk.pwr_up != 1 || iPHYS.omega_lft != iPHYS.omega_rght
 		|| iPHYS.theta_lft != iPHYS.theta_rght) begin
 		$display("FAIL 1: The segway should be powered with no steering.");
+		$stop();
 	end
 
 	// Check that steering is disabled (must stay under min_rider_weight when setting cells)
 	lft_cell_set = 12'h100;
 	rght_cell_set = 12'h050;
 	// Check that pwr is on. wheels should be equal (no steering)
-	repeat(10000) @(posedge clk);
+	repeat(100000) @(posedge clk);
   	if (iDUT.i_Auth_blk.pwr_up != 1 || iPHYS.omega_lft != iPHYS.omega_rght
 		|| iPHYS.theta_lft != iPHYS.theta_rght) begin
 		$display("FAIL 2: The segway should be powered with no steering.");
+		$stop();
 	end
 
 	// Check that steering is disabled (must stay under min_rider_weight when setting cells)
 	lft_cell_set = 12'h0F0;
 	rght_cell_set = 12'h100;
 	// Check that pwr is on. wheels should be equal (no steering)
-	repeat(10000) @(posedge clk);
+	repeat(100000) @(posedge clk);
   	if (iDUT.i_Auth_blk.pwr_up != 1 || iPHYS.omega_lft != iPHYS.omega_rght
 		|| iPHYS.theta_lft != iPHYS.theta_rght) begin
 		$display("FAIL 3: The segway should be powered with no steering.");
+		$stop();
 	end
 
 	// Now enable steering and check that wheels move at different speeds
 	lft_cell_set = 12'h150;
 	rght_cell_set = 12'h100;
 	rider_lean = 14'h0800;
-	repeat(50000) @(posedge clk);
+	repeat(300000) @(posedge clk);
   	if (iDUT.i_Auth_blk.pwr_up != 1 || iPHYS.omega_lft == iPHYS.omega_rght
 		|| iPHYS.theta_lft == iPHYS.theta_rght) begin
 		$display("FAIL 4: The segway should be powered and turning.");
+		$stop();
 	end
 
 	// Now make the load cells greater than 6.25% of each other. Steering should disable.
 	lft_cell_set = 12'h400;
 	rght_cell_set = 12'h100;
 	rider_lean = 14'h0800;
-	repeat(10000) @(posedge clk);
+	repeat(100000) @(posedge clk);
   	if (iDUT.i_Auth_blk.pwr_up != 1 || iPHYS.omega_lft != iPHYS.omega_rght) begin
 		$display("FAIL 5: The segway should be powered with no steering.");
+		$stop();
 	end
 
 

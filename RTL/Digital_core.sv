@@ -1,11 +1,12 @@
-module Digital_core(clk,rst_n,pwr_up,whl_spd_lft,whl_spd_rght, lft_ld, rght_ld, batt, nxt, lft_spd, rght_spd, lft_rev, rght_rev, moving, ovr_spd, batt_low, SS_n, SCLK, MOSI, MISO, INT, rider_off_w);
+module Digital_core(clk,rst_n,pwr_up, lft_ld, rght_ld,
+			batt, nxt, lft_spd, rght_spd, lft_rev, rght_rev, moving,
+			ovr_spd, batt_low, SS_n, SCLK, MOSI, MISO, INT, rider_off_w);
 
 
 
 //****************** I/O Ports **************************//
 //*******************************************************//
 input pwr_up; 	// coming from auth blk
-input whl_spd_lft, whl_spd_rght;	// from optical sensors
 input [11:0] lft_ld, rght_ld, batt;	// to and from A2D interface
 output nxt;
 
@@ -31,7 +32,7 @@ logic en_steer_w, vld_w;
 logic [15:0] ptch_w;
 logic [11:0] ld_cell_diff_w;
 
-reg [18:0] cnt_val;
+//reg [18:0] cnt_val;
 //******************** Submodules ***********************//
 //*******************************************************//
 
@@ -59,15 +60,15 @@ balance_cntrl i_balance_cntr (.clk(clk), .rst_n(rst_n),.vld(vld_w),.ptch(ptch_w)
 
 
 
-
+/*
 always @ (posedge clk, negedge rst_n) begin
 	if (!rst_n)
 		cnt_val <= 0;
 	else
 		cnt_val <= cnt_val + 1;
 end
+*/
 
-
-assign nxt = (&cnt_val) ? 1 : 0;
+assign nxt = INT;
 
 endmodule

@@ -19,7 +19,7 @@ module steer_en(clk,rst_n,lft_ld, rght_ld,ld_cell_diff,en_steer,rider_off);
   
 reg [25:0] count;
 
-localparam MIN_RIDER_WEIGHT = 100;	// to be updated - error
+localparam MIN_RIDER_WEIGHT = 12'h200;	// to be updated - error
 
 // code begins
 //
@@ -96,7 +96,7 @@ nxt_state = IDLE;
 clr_tmr = 1'b0; 
 rider_off = 1'b1;
 en_steer = 1'b0; 
-case (STATE)
+case (state)
 	IDLE: if (sum_gt_min) begin  nxt_state = WAIT; clr_tmr = 1'b1; end 
 	      else nxt_state = IDLE;
 	WAIT: begin

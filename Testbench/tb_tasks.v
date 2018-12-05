@@ -43,6 +43,32 @@ task moveEn;
 	end
 endtask
 
+task test_rider_off;
+	begin
+		lft_cell_set = 12'h700;
+		rght_cell_set = 12'h700;
+	end
+endtask
+
+task SendA2D;
+	input [11:0] send_lft_cell_set;
+	input [11:0] send_rght_cell_set;
+	input [11:0] send_batt_set;	
+	begin
+        	lft_cell_set = send_lft_cell_set;
+        	rght_cell_set = send_rght_cell_set;
+        	batt_set = send_batt_set;
+    	end
+endtask
+
+
+task SetLean;
+	input [13:0] lean;
+	begin
+		rider_lean = lean;
+	end
+endtask
+
 /*
 // Is this kind of task actually helpful?
 task getPlatformTheta;

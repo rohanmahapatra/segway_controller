@@ -1,5 +1,5 @@
 module balance_cntrl(clk,rst_n,vld,ptch,ld_cell_diff,lft_spd,lft_rev,
-                     rght_spd,rght_rev,rider_off, en_steer, pwr_up, too_fast);
+                     rght_spd,rght_rev,rider_off, en_steer, pwr_up, too_fast, fast_sim);
 								
   input clk,rst_n;
   input vld;						// tells when a new valid inertial reading ready
@@ -88,7 +88,7 @@ module balance_cntrl(clk,rst_n,vld,ptch,ld_cell_diff,lft_spd,lft_rev,
   else integrator_reg <= integrator_reg_input;
   end 
 
-  assign integrator = integrator_reg[17:6];
+	assign integrator = fast_sim ? integrator_reg[17:2] : integrator_reg[17:6];
 
   //// D of PID 
 

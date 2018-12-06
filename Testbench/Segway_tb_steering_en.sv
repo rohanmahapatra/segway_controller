@@ -24,19 +24,19 @@ wire cmd_sent;
 
 ////////////////////////////////////////////////////////////////
 // Instantiate Physical Model of Segway with Inertial sensor //
-//////////////////////////////////////////////////////////////	
+//////////////////////////////////////////////////////////////
 SegwayModel iPHYS(.clk(clk),.RST_n(RST_n),.SS_n(SS_n),.SCLK(SCLK),
                   .MISO(MISO),.MOSI(MOSI),.INT(INT),.PWM_rev_rght(PWM_rev_rght),
 				  .PWM_frwrd_rght(PWM_frwrd_rght),.PWM_rev_lft(PWM_rev_lft),
-				  .PWM_frwrd_lft(PWM_frwrd_lft),.rider_lean(rider_lean));				  
+				  .PWM_frwrd_lft(PWM_frwrd_lft),.rider_lean(rider_lean));
 
 /////////////////////////////////////////////////////////
 // Instantiate Model of A2D for load cell and battery //
 ///////////////////////////////////////////////////////
-ADC128S iA2D(.clk(clk), .rst_n(RST_n), .SS_n(A2D_SS_n), .SCLK(A2D_SCLK), .MISO(A2D_MISO), 
+ADC128S iA2D(.clk(clk), .rst_n(RST_n), .SS_n(A2D_SS_n), .SCLK(A2D_SCLK), .MISO(A2D_MISO),
 		.MOSI(A2D_MOSI), .batt_set(batt_set), .lft_cell_set(lft_cell_set), .rght_cell_set(rght_cell_set));
-  
-  
+
+
 ////// Instantiate DUT ////////
 Segway iDUT(.clk(clk),.RST_n(RST_n),.LED(),.INERT_SS_n(SS_n),.INERT_MOSI(MOSI),
             .INERT_SCLK(SCLK),.INERT_MISO(MISO),.A2D_SS_n(A2D_SS_n),
@@ -45,7 +45,7 @@ Segway iDUT(.clk(clk),.RST_n(RST_n),.LED(),.INERT_SS_n(SS_n),.INERT_MOSI(MOSI),
 			.PWM_rev_lft(PWM_rev_lft),.PWM_frwrd_lft(PWM_frwrd_lft),
 			.piezo_n(piezo_n),.piezo(piezo),.RX(RX_TX));
 
-	
+
 //// Instantiate UART_tx (mimics command from BLE module) //////
 //// You need something to send the 'g' for go ////////////////
 UART_tx iTX(.clk(clk),.rst_n(RST_n),.TX(RX_TX),.trmt(send_cmd),.tx_data(cmd),.tx_done(cmd_sent));
@@ -54,7 +54,7 @@ UART_tx iTX(.clk(clk),.rst_n(RST_n),.TX(RX_TX),.trmt(send_cmd),.tx_data(cmd),.tx
 // This test bench verifies steering is disabled until load cell and pwr_up conditions are met.
 // load cells must remain within 6.25% of eachother during use. and must be within 25% of each other
 // for >1.3 secs before steering is enabled.
-// 
+//
 //
 //reg signed [15:0] omega_lft,omega_rght;				// angular velocities of wheels
 //reg signed [19:0] theta_lft,theta_rght;				// amount wheels have rotated since start
@@ -123,7 +123,7 @@ initial begin
 	rght_cell_set = 12'h004;
 	rider_lean = 14'h0800;
 	repeat(100000) @(posedge clk);
-  	if (iDUT.i_Auth_blk.pwr_up != 1 || iPHYS.omega_lft != iPHYS.omega_rght) begin
+  	if (iDUT.i_Auth_blk.pwr_up != 1 || iDUT.i_Digital_core.en_steer_w) begin
 		$display("FAIL 5: The segway should be powered with no steering.");
 		$stop();
 	end
@@ -139,7 +139,4 @@ end
 
 `include "tb_tasks.v"
 
-endmodule	
-
-
-
+endmodule

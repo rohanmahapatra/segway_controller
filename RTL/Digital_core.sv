@@ -1,6 +1,6 @@
 module Digital_core(clk,rst_n,pwr_up, lft_ld, rght_ld,
 			batt, nxt, lft_spd, rght_spd, lft_rev, rght_rev, moving,
-			ovr_spd, batt_low, SS_n, SCLK, MOSI, MISO, INT, rider_off_w);
+			ovr_spd, batt_low, SS_n, SCLK, MOSI, MISO, INT, rider_off_w, fast_sim);
 
 
 
@@ -8,6 +8,7 @@ module Digital_core(clk,rst_n,pwr_up, lft_ld, rght_ld,
 //*******************************************************//
 input pwr_up; 	// coming from auth blk
 input [11:0] lft_ld, rght_ld, batt;	// to and from A2D interface
+input fast_sim;		// Used to speed up simulation time
 output nxt;
 
 output [10:0] lft_spd;	// to mtr_drv
@@ -46,7 +47,7 @@ logic [11:0] ld_cell_diff_w;
 
 
 
-steer_en i_steer_en(.clk(clk), .rst_n(rst_n), .lft_ld(lft_ld),.rght_ld(rght_ld), .ld_cell_diff(ld_cell_diff_w), .en_steer(en_steer_w), .rider_off(rider_off_w) );
+steer_en i_steer_en(.clk(clk), .rst_n(rst_n), .lft_ld(lft_ld),.rght_ld(rght_ld), .ld_cell_diff(ld_cell_diff_w), .en_steer(en_steer_w), .rider_off(rider_off_w), .fast_sim(fast_sim));
 // lft_ld, rght_ld - input ; ld_cell_diff, en_steer, rider_off - output
 
 inert_intf i_inert_intr (.clk(clk), .rst_n(rst_n), .vld(vld_w), .ptch(ptch_w), .SS_n(SS_n), .MOSI(MOSI), .SCLK(SCLK), .MISO(MISO), .INT(INT));

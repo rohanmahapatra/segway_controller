@@ -66,7 +66,7 @@ module Segway_tb();
 		//Turn on the Segway
 		SendCmd(8'h67);
 		SendA2D(11'h205,11'h205, 11'h0FF);
-		repeat(65000000) @(posedge clk);
+		repeat(50000) @(posedge clk);
 
 		// TEST 1: batt_low sound should assert (no lean, no lean on loadcells, and battery = 0x0FF)//
 	  	SendA2D(11'h205,11'h205, 11'h0FF);

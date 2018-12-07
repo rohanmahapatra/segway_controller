@@ -29,7 +29,7 @@ module ADC128S(clk,rst_n,SS_n,SCLK,MISO,MOSI, batt_set, lft_cell_set, rght_cell_
   /////////////////////////////////////////////
   reg rdy_ff;				// used for edge detection on rdy
   reg [2:0] channel;		// pointer to last channel specified for A2D conversion to be performed on.
-  reg [11:0] value;
+  logic [11:0] value;
   
   /////////////////////////////////////////////
   // SM outputs declared as type logic next //
@@ -52,7 +52,12 @@ module ADC128S(clk,rst_n,SS_n,SCLK,MISO,MOSI, batt_set, lft_cell_set, rght_cell_
 	  if ((channel!=3'b000) && (channel!=3'b100) && (channel!=3'b101))
 	    $display("WARNING: Only channels 0,4,5 of A2D valid for this version of ADC128S\n");
 	end
-	
+
+assign value = (channel == 3'b000) ? lft_cell_set :
+		(channel == 3'b100) ? rght_cell_set :
+		(channel == 3'b101) ? batt_set :
+		value;
+/*
   always_ff @(posedge clk, negedge rst_n)
     if (!rst_n)
 	  value <= 12'hC00;
@@ -64,7 +69,7 @@ module ADC128S(clk,rst_n,SS_n,SCLK,MISO,MOSI, batt_set, lft_cell_set, rght_cell_
 	  value <= batt_set;
     else
 	  value <= value;
-	  
+ */
   //// Infer state register next ////
   always_ff @(posedge clk, negedge rst_n)
     if (!rst_n)

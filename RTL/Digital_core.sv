@@ -2,7 +2,7 @@ module Digital_core(clk,rst_n,pwr_up, lft_ld, rght_ld,
 			batt, nxt, lft_spd, rght_spd, lft_rev, rght_rev, moving,
 			ovr_spd, batt_low, SS_n, SCLK, MOSI, MISO, INT, rider_off_w, fast_sim);
 
-
+localparam BATT_LOW_THRESHOLD = 12'h800;
 
 //****************** I/O Ports **************************//
 //*******************************************************//
@@ -44,8 +44,14 @@ logic [11:0] ld_cell_diff_w;
 
 //*******************************************************//
 
+// To the piezo
 assign moving = en_steer_w;
 
+// batt_low enables the batt_low piezo sound
+assign batt_low = (batt < BATT_LOW_THRESHOLD) ? 1'b1 : 1'b0;
+
+// Get new A2D conversion when we get an inertial interrupt
+assign nxt = INT;
 
 steer_en i_steer_en(.clk(clk), .rst_n(rst_n), .lft_ld(lft_ld),.rght_ld(rght_ld), .ld_cell_diff(ld_cell_diff_w), .en_steer(en_steer_w), .rider_off(rider_off_w), .fast_sim(fast_sim));
 // lft_ld, rght_ld - input ; ld_cell_diff, en_steer, rider_off - output
@@ -58,18 +64,5 @@ balance_cntrl i_balance_cntr (.clk(clk), .rst_n(rst_n),.vld(vld_w),.ptch(ptch_w)
 		              .rght_spd(rght_spd),.rght_rev(rght_rev),.rider_off(rider_off_w), .en_steer(en_steer_w), .pwr_up(pwr_up), .too_fast(ovr_spd), .fast_sim(fast_sim));
 // vld, rider_off, en_steer - input ; ptch, ld_cell_diff - signed input;
 // lft_spd, rght_spd, lft_rev, rght_rev - output
-
-
-
-/*
-always @ (posedge clk, negedge rst_n) begin
-	if (!rst_n)
-		cnt_val <= 0;
-	else
-		cnt_val <= cnt_val + 1;
-end
-*/
-
-assign nxt = INT;
 
 endmodule

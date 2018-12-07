@@ -48,59 +48,46 @@ Segway iDUT(.clk(clk),.RST_n(RST_n),.LED(),.INERT_SS_n(SS_n),.INERT_MOSI(MOSI),
 //// You need something to send the 'g' for go ////////////////
 UART_tx iTX(.clk(clk),.rst_n(RST_n),.TX(RX_TX),.trmt(send_cmd),.tx_data(cmd),.tx_done(cmd_sent));
 
+
+//
+// This test bench verifies the A2D converter receiving the correct data for the correct channel
+//
+initial begin
+	Initialize();
+  	@(negedge clk);
+	RST_n = 1;
+    	repeat(1000) @(posedge clk);
+	SendCmd(8'h67);
+
 	//
-	// This test runs the lean simulus described in "TestingSegway.pdf"
-	// This test is self checking, but theta_platform should also be visually verified.
+    	// START TESTS
+    	//
+
 	//
-	initial begin
-		Initialize();
-  		@(negedge clk);
-		RST_n = 1;
-    		repeat(1000) @(posedge clk);
-
-		//
-    		// START TESTS
-    		//
-
-
-		//Turn on the Segway
-		SendCmd(8'h67);
-		SendA2D(12'h205, 12'h205, 12'h0FF);
-		repeat(50000) @(posedge clk);
-
-		// Run max positive for 1,000,000 clks
-	  	SendA2D(12'h205,12'h205, 12'h0FF);
-		SetLean(14'h1FFF);
-		repeat(1000000) @(posedge clk);
-	  	if (iPHYS.theta_platform > 1000) begin
-			$display("FAIL 1: Lean should be converging on +0.");
-			$stop();
-		end
-	
-		// Run 0 lean for 1,000,000 clks
-		SetLean(14'h0000);
-		repeat(1000000) @(posedge clk);
-	  	if (iPHYS.theta_platform < -1000) begin
-			$display("FAIL 2: Lean should be converging on -0.");
-			$stop();
-		end
-
-
-
-		$display("YAHOO! All segway leans tests Pass!");
-	  	$stop();
+	SendA2D(12'h001, 12'h005, 12'h015);	// left_cell, right_cell, batt
+	repeat(4) @(posedge iDUT.nxt_w);
+  	if (iDUT.lft_ld_w != lft_cell_set || iDUT.rght_ld_w != rght_cell_set || iDUT.batt_w!= batt_set) begin
+		$display("FAIL 1: A2D data does not match.");
+		$stop();
 	end
+
 	
-	// Hoffman uses 10 time unit clock
-	always begin
-	  #10 clk = ~clk;
-	end
 	
-	`include "tb_tasks.v";
+	
+	
 	
 
-	endmodule	
-	
+	$display("YAHOO! test passed!");
+  	$stop();
+end
+
+always begin
+  #5 clk = ~clk;
+end
+
+`include "tb_tasks.v"
+
+endmodule	
 
 
 

@@ -8,6 +8,7 @@ module balance_cntrl(clk,rst_n,vld,ptch,ld_cell_diff,lft_spd,lft_rev,
   input rider_off;					// High when weight on load cells indicates no rider
   input en_steer;
   input pwr_up;					// enables the entire module
+  input fast_sim;				// use faster integration
   output [10:0] lft_spd;			// 11-bit unsigned speed at which to run left motor
   output lft_rev;					// direction to run left motor (1==>reverse)
   output [10:0] rght_spd;			// 11-bit unsigned speed at which to run right motor

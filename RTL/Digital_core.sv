@@ -44,7 +44,7 @@ logic [11:0] ld_cell_diff_w;
 
 //*******************************************************//
 
-
+assign moving = en_steer_w;
 
 
 steer_en i_steer_en(.clk(clk), .rst_n(rst_n), .lft_ld(lft_ld),.rght_ld(rght_ld), .ld_cell_diff(ld_cell_diff_w), .en_steer(en_steer_w), .rider_off(rider_off_w), .fast_sim(fast_sim));

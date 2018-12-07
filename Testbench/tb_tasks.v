@@ -37,9 +37,9 @@ endtask
 task moveEn;
 	begin
     SendCmd(8'h67);
-    rght_cell_set = 12'h100;
-    lft_cell_set = 12'h100;
-    @(!iDUT.rider_off_w);
+    rght_cell_set = 12'h105;
+    lft_cell_set = 12'h105;
+    @(posedge iDUT.moving_w);
 	end
 endtask
 

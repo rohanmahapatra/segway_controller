@@ -23,7 +23,6 @@ wire cmd_sent;
 reg signed [15:0] prev_omega_lft;
 reg signed [19:0] prev_theta_lft;
 
-
 ////////////////////////////////////////////////////////////////
 // Instantiate Physical Model of Segway with Inertial sensor //
 //////////////////////////////////////////////////////////////
@@ -78,18 +77,17 @@ initial begin
 
 	// Right now lean = 0; lft_load_cell = 0; rght_load_cell = 0;
 	// the platform should not be moving a lot, maybe some balancing
-	if (iPHYS.theta_platform > PLAT_ERROR || iPHYS.theta_platform < -PLAT_ERROR
-		|| iPHYS.omega_lft > PLAT_ERROR || iPHYS.omega_lft < -PLAT_ERROR
-        || iPHYS.omega_rght > PLAT_ERROR || iPHYS.omega_rght < -PLAT_ERROR) begin
+	if (abs(iPHYS.theta_platform) > PLAT_ERROR || abs(iPHYS.omega_lft) > PLAT_ERROR || abs(iPHYS.omega_rght) > PLAT_ERROR) begin
 		$display("FAIL 1: The platform should not be moving.");
 		$stop();
 	end
 
+
 	// Increase the right load cell and lean to simulate a right forward turn
     // Left wheel should turn and move faster than the right
-    rght_cell_set = 12'h108;
-    rider_lean = 14'h0800;
-	repeat(1000) @(posedge clk);
+    rght_cell_set = 12'h180;
+    rider_lean = 14'h0080;
+	repeat(500000) @(posedge clk);
     if (iPHYS.omega_lft <= 0 || iPHYS.theta_lft <= 0 || iPHYS.omega_rght >= iPHYS.omega_lft) begin
 		$display("FAIL 2: The platform should be making a right turn.");
 		$stop();
@@ -102,7 +100,7 @@ initial begin
     // Left wheel should now be moving faster than the previous test
     rght_cell_set = 12'h180;
     rider_lean = 14'h0800;
-	repeat(1000) @(posedge clk);
+	repeat(100000) @(posedge clk);
     if (iPHYS.omega_lft <= 0 || iPHYS.theta_lft <= 0 || iPHYS.omega_rght >= iPHYS.omega_lft
         || iPHYS.omega_lft <= prev_omega_lft || iPHYS.theta_lft <= prev_theta_lft) begin
 		$display("FAIL 3: The platform should be making a sharper right turn.");
@@ -116,7 +114,7 @@ initial begin
     // in the previous test
     rght_cell_set = 12'h110;
     rider_lean = 14'h0800;
-    repeat(1000) @(posedge clk);
+    repeat(100000) @(posedge clk);
     if (iPHYS.omega_lft <= 0 || iPHYS.theta_lft <= 0 || iPHYS.omega_rght >= iPHYS.omega_lft
         || iPHYS.omega_lft >= prev_omega_lft || iPHYS.theta_lft <= prev_theta_lft) begin
         $display("FAIL 4: The platform should be making a slower right turn.");
@@ -138,7 +136,7 @@ initial begin
     //
     rght_cell_set = 12'h110;
     rider_lean = -14'h0800;
-    repeat(1000) @(posedge clk);
+    repeat(100000) @(posedge clk);
     if (iPHYS.omega_lft >= 0 || iPHYS.omega_rght < iPHYS.omega_lft
         || iPHYS.omega_lft >= prev_omega_lft || iPHYS.theta_lft >= prev_theta_lft) begin
         $display("FAIL 5: The platform should be making a reverse right turn.");
@@ -157,7 +155,7 @@ initial begin
     //
     rght_cell_set =12'h180;
     rider_lean = -14'h0800;
-    repeat(1000) @(posedge clk);
+    repeat(100000) @(posedge clk);
     if (iPHYS.omega_lft >= 0 || iPHYS.omega_rght < iPHYS.omega_lft
         || iPHYS.omega_lft >= prev_omega_lft || iPHYS.theta_lft >= prev_theta_lft) begin
         $display("FAIL 6: The platform should be making a faster reverse righ turn.");
@@ -175,6 +173,12 @@ end
 always begin
   #5 clk = ~clk;
 end
+
+function [15:0] abs([15:0] val);
+	begin
+	abs = (val[15] == 1'b1) ? (~(val) + 1) : val;
+	end
+endfunction
 
 `include "tb_tasks.v"
 

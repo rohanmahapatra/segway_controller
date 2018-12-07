@@ -31,7 +31,7 @@ always_comb begin
 		audio_o = counter[13];
 	else if (batt_low && counter[24])
 		audio_o = counter[14];
-	else if(moving && &(counter[26:23]) && !ovr_spd && !batt_low)
+	else if(moving && &(counter[26:23]))
 		audio_o = counter[16];
 	else 
 		audio_o = 0;

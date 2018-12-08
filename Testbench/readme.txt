@@ -15,9 +15,12 @@ Segway_tb_left_turn
 NOT FINSHED/UNIMPLEMENTED
 Segway_tb_piezo_drv
 	- Use assertion? (lecture 7)
+Segway_tb_lean.sv
+	- Need to add self-checking
 lean testing
 	- Step up rider_lean
 	- Step down rider_lean
 	- Max positive/negative
 Write script to run all tests
 Add block level tests from previous exercises
+

@@ -53,7 +53,7 @@ UART_tx iTX(.clk(clk),.rst_n(RST_n),.TX(RX_TX),.trmt(send_cmd),.tx_data(cmd),.tx
 
 //
 // This test bench verifies the right load cell by making right turns.
-// load cells must remain within 6.25% of eachother during use.
+// Load cells must remain within 6.25% of eachother during use.
 //
 //reg signed [15:0] omega_lft,omega_rght;				// angular velocities of wheels
 //reg signed [19:0] theta_lft,theta_rght;				// amount wheels have rotated since start
@@ -64,16 +64,16 @@ initial begin
 	Initialize();
   	@(negedge clk);
 	RST_n = 1;
-    prev_omega_lft = 0;
-    prev_theta_lft = 0;
-    repeat(1000) @(posedge clk);
+    	prev_omega_lft = 0;
+    	prev_theta_lft = 0;
+    	repeat(10000) @(posedge clk);
 
-    // Get the segway into a balance and steering enabled state
-    moveEn();
+    	// Get the segway into a balance and steering enabled state
+    	moveEn();
 
-    //
-    // START TESTS
-    //
+    	//
+    	// START TESTS
+    	//
 
 	// Right now lean = 0; lft_load_cell = 0; rght_load_cell = 0;
 	// the platform should not be moving a lot, maybe some balancing
@@ -82,88 +82,84 @@ initial begin
 		$stop();
 	end
 
-
 	// Increase the right load cell and lean to simulate a right forward turn
-    // Left wheel should turn and move faster than the right
-    rght_cell_set = 12'h180;
-    rider_lean = 14'h0080;
-	repeat(500000) @(posedge clk);
-    if (iPHYS.omega_lft <= 0 || iPHYS.theta_lft <= 0 || iPHYS.omega_rght >= iPHYS.omega_lft) begin
+    	// Left wheel should turn and move faster than the right
+    	rght_cell_set = 12'h130;
+    	rider_lean = 14'h0F00;
+	repeat(1000000) @(posedge clk);
+	if (iPHYS.omega_lft <= 0 || iPHYS.theta_lft <= 0 || iPHYS.omega_rght >= iPHYS.omega_lft) begin
 		$display("FAIL 2: The platform should be making a right turn.");
 		$stop();
 	end
-    prev_omega_lft = iPHYS.omega_lft;
-    prev_theta_lft = iPHYS.theta_lft;
+    	prev_omega_lft = iPHYS.omega_lft;
+    	prev_theta_lft = iPHYS.theta_lft;
 
-    // Increase the right load cell again and lean to simulate a right forward turn
-    // Left wheel should be moving faster than the right
-    // Left wheel should now be moving faster than the previous test
-    rght_cell_set = 12'h180;
-    rider_lean = 14'h0800;
-	repeat(100000) @(posedge clk);
-    if (iPHYS.omega_lft <= 0 || iPHYS.theta_lft <= 0 || iPHYS.omega_rght >= iPHYS.omega_lft
-        || iPHYS.omega_lft <= prev_omega_lft || iPHYS.theta_lft <= prev_theta_lft) begin
+    	// Increase the right load cell again and lean to simulate a right forward turn
+    	// Left wheel should be moving faster than the right
+    	// Left wheel should now be moving faster than the previous test
+    	rght_cell_set = 12'h190;
+    	//rider_lean = 14'h0400;
+	repeat(1000000) @(posedge clk);
+    	if (iPHYS.omega_lft <= 0 || iPHYS.theta_lft <= 0 || iPHYS.omega_rght >= iPHYS.omega_lft
+        	|| iPHYS.omega_lft <= prev_omega_lft || iPHYS.theta_lft <= prev_theta_lft) begin
 		$display("FAIL 3: The platform should be making a sharper right turn.");
 		$stop();
 	end
-    prev_omega_lft = iPHYS.omega_lft;
-    prev_theta_lft = iPHYS.theta_lft;
+    	prev_omega_lft = iPHYS.omega_lft;
+    	prev_theta_lft = iPHYS.theta_lft;
 
-    // decrease the right load cell and lean to simulate coming out of a right turn
-    // Left wheel should be moving faster than right, but slower than
-    // in the previous test
-    rght_cell_set = 12'h110;
-    rider_lean = 14'h0800;
-    repeat(100000) @(posedge clk);
-    if (iPHYS.omega_lft <= 0 || iPHYS.theta_lft <= 0 || iPHYS.omega_rght >= iPHYS.omega_lft
-        || iPHYS.omega_lft >= prev_omega_lft || iPHYS.theta_lft <= prev_theta_lft) begin
-        $display("FAIL 4: The platform should be making a slower right turn.");
-        $stop();
-    end
-    prev_omega_lft = iPHYS.omega_lft;
-    prev_theta_lft = iPHYS.theta_lft;
-
-
-    //
-    // Now go backwards
-    //
-
-    // Set rider_lean so the segway goes backwards with the rght load cell
-    // set to make a right turn. The segway should be slowly making a backwards
-    // right turn.
-    //
-    // NOTE: Does iPHYS.theta_lft decrease in value when the wheels go backwards?
-    //
-    rght_cell_set = 12'h110;
-    rider_lean = -14'h0800;
-    repeat(100000) @(posedge clk);
-    if (iPHYS.omega_lft >= 0 || iPHYS.omega_rght < iPHYS.omega_lft
-        || iPHYS.omega_lft >= prev_omega_lft || iPHYS.theta_lft >= prev_theta_lft) begin
-        $display("FAIL 5: The platform should be making a reverse right turn.");
-        $display("FAIL 5: NOTE - This test may have passed. Check the test comment.");
-        $stop();
-    end
-    prev_omega_lft = iPHYS.omega_lft;
-    prev_theta_lft = iPHYS.theta_lft;
+    	// decrease the right load cell and lean to simulate coming out of a right turn
+    	// Left wheel should be moving faster than right, but slower than
+    	// in the previous test
+    	rght_cell_set = 12'h120;
+    	rider_lean = 14'h0800;
+    	repeat(2000000) @(posedge clk);
+    	if (iPHYS.omega_lft <= 0 || iPHYS.theta_lft <= 0 || iPHYS.omega_rght >= iPHYS.omega_lft
+        	|| iPHYS.omega_lft >= prev_omega_lft) begin
+        	$display("FAIL 4: The platform should be making a slower right turn.");
+        	$stop();
+    	end
+    	prev_omega_lft = iPHYS.omega_lft;
+    	prev_theta_lft = iPHYS.theta_lft;
 
 
-    // Set rider_lean so the segway goes backwards with the rght load cell
-    // set to make a right turn. The segway should be more quickly making a backwards
-    // right turn.
-    //
-    // NOTE: Does iPHYS.theta_lft decrease in value when the wheels go backwards?
-    //
-    rght_cell_set =12'h180;
-    rider_lean = -14'h0800;
-    repeat(100000) @(posedge clk);
-    if (iPHYS.omega_lft >= 0 || iPHYS.omega_rght < iPHYS.omega_lft
-        || iPHYS.omega_lft >= prev_omega_lft || iPHYS.theta_lft >= prev_theta_lft) begin
-        $display("FAIL 6: The platform should be making a faster reverse righ turn.");
-        $display("FAIL 6: NOTE - This test may have passed. Check the test comment.");
-        $stop();
-    end
-    prev_omega_lft = iPHYS.omega_lft;
-    prev_theta_lft = iPHYS.theta_lft;
+    	//
+    	// Now go backwards
+    	//
+
+	//
+    	// Set rider_lean so the segway goes backwards with the rght load cell
+    	// set to make a right turn. The segway should be slowly making a backwards
+    	// right turn.
+    	//
+    	rght_cell_set = 12'h150;
+    	rider_lean = -14'h0F00;
+    	repeat(3000000) @(posedge clk);
+    	if (iPHYS.omega_lft >= 0 || abs(iPHYS.omega_rght) > abs(iPHYS.omega_lft)
+        	|| iPHYS.omega_lft >= prev_omega_lft || iPHYS.theta_lft >= prev_theta_lft) begin
+        	$display("FAIL 5: The platform should be making a reverse right turn.");
+        	$stop();
+    	end
+    	prev_omega_lft = iPHYS.omega_lft;
+    	prev_theta_lft = iPHYS.theta_lft;
+
+	//
+    	// Set rider_lean so the segway goes backwards with the rght load cell
+    	// set to make a right turn. The segway should be more quickly making a backwards
+    	// right turn.
+    	//
+    	// NOTE: Does iPHYS.theta_lft decrease in value when the wheels go backwards?
+    	//
+    	rght_cell_set =12'h200;
+    	rider_lean = -14'h0800;
+    	repeat(1000000) @(posedge clk);
+    	if (iPHYS.omega_lft >= 0 || abs(iPHYS.omega_rght) < abs(iPHYS.omega_lft)
+        	|| iPHYS.omega_lft >= prev_omega_lft || iPHYS.theta_lft >= prev_theta_lft) begin
+        	$display("FAIL 6: The platform should be making a faster reverse righ turn.");
+        	$stop();
+    	end
+    	prev_omega_lft = iPHYS.omega_lft;
+    	prev_theta_lft = iPHYS.theta_lft;
 
 
 	$display("YAHOO! test passed!");

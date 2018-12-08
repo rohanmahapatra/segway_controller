@@ -1,6 +1,8 @@
 module Segway_tb();
 
 localparam MIN_LOAD_SENSOR = 12'h200;  // left_load + rght_load >= 0x200
+localparam GO = 8'h67;
+localparam STOP = 8'h73;
 
 //// Interconnects to DUT/support defined as type wire /////
 wire SS_n,SCLK,MOSI,MISO,INT;				// to inertial sensor
@@ -73,7 +75,7 @@ initial begin
 
 
     	// Send go to the segway. Only balancing should be enabled
-	SendCmd(8'h67);
+	SendCmd(GO);
 
 	// Check that pwr is on. wheels should be equal (no steering)
 	rider_lean = 14'h0080;
@@ -84,7 +86,7 @@ initial begin
 		$stop();
 	end
 
-	// Check that steering is disabled (must stay under min_rider_weight when setting cells)
+	// Check that steering is disabled since we are under min weight
 	lft_cell_set = 12'h100;
 	rght_cell_set = 12'h050;
 	// Check that pwr is on. wheels should be equal (no steering)
@@ -96,7 +98,6 @@ initial begin
 	end
 
 	// Check that steering is disabled (must stay under min_rider_weight when setting cells)
-	// This condition should cause rider_off to go low
 	lft_cell_set = 12'h0F0;
 	rght_cell_set = 12'h100;
 	// Check that pwr is on. wheels should be equal (no steering)
@@ -118,7 +119,7 @@ initial begin
 		$stop();
 	end
 
-	// Now make the load cells greater than 6.25% of each other. Steering should disable.
+	// Now make the load cells greater than 6.25% of each other. Steering should disable, but power should be on.
 	lft_cell_set = 12'h200;
 	rght_cell_set = 12'h004;
 	rider_lean = 14'h0800;
@@ -128,9 +129,8 @@ initial begin
 		$stop();
 	end
 
-
 	$display("YAHOO! test passed!");
-  	$stop();
+	  	$stop();
 end
 
 always begin

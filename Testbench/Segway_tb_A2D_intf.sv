@@ -71,11 +71,13 @@ initial begin
 		$stop();
 	end
 
-	
-	
-	
-	
-	
+	SendA2D(12'h018, 12'h0FF, 12'h123);	// left_cell, right_cell, batt
+	repeat(10) @(posedge iDUT.nxt_w);
+  	if (iDUT.lft_ld_w != lft_cell_set || iDUT.rght_ld_w != rght_cell_set || iDUT.batt_w!= batt_set) begin
+		$display("FAIL 1: A2D data does not match.");
+		$stop();
+	end
+
 
 	$display("YAHOO! test passed!");
   	$stop();

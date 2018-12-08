@@ -1,5 +1,8 @@
 module Segway_tb();
 
+localparam GO = 8'h67;
+localparam STOP = 8'h73;
+
 //// Interconnects to DUT/support defined as type wire /////
 wire SS_n,SCLK,MOSI,MISO,INT;				// to inertial sensor
 wire A2D_SS_n,A2D_SCLK,A2D_MOSI,A2D_MISO;	// to A2D converter
@@ -57,21 +60,21 @@ initial begin
   	//repeat(50000) @(posedge clk);
   
 	// pwr_up should assert
-  	SendCmd(8'h67);
+  	SendCmd(GO);
 	repeat(100) @(posedge clk);
   	if (iDUT.i_Auth_blk.pwr_up != 1) begin
 		$display("FAIL 1: pwr_up from AUTH_blk not asserted");
 	end 
 
 	// pwr_up should deassert
-	SendCmd(8'h73);
+	SendCmd(STOP);
 	repeat(100) @(posedge clk);
   	if (iDUT.i_Auth_blk.pwr_up != 0) begin
 		$display("FAIL 2: pwr_up from AUTH_blk should not be asserted");
 	end
 
 	// pwr_up should still be deasserted
-	SendCmd(8'h73);
+	SendCmd(STOP);
 	repeat(100) @(posedge clk);
   	if (iDUT.i_Auth_blk.pwr_up != 0) begin
 		$display("FAIL 3: pwr_up from AUTH_blk should not be asserted");
@@ -83,7 +86,7 @@ initial begin
 		$display("FAIL 4: pwr_up from AUTH_blk should still not be asserted");
 	end
 
-	SendCmd(8'h67);
+	SendCmd(GO);
 	repeat(100) @(posedge clk);
   	if (iDUT.i_Auth_blk.pwr_up != 1) begin
 		$display("FAIL 4: pwr_up from AUTH_blk should be asserted");

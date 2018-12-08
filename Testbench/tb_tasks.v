@@ -5,7 +5,7 @@ task Initialize;
 		cmd = 8'h00;
 		send_cmd = 0;
 		rider_lean = 14'h0000;
-		batt_set = 12'h000;
+		batt_set = 12'h900;
 		lft_cell_set = 12'h000;
 		rght_cell_set = 12'h000;
 	end

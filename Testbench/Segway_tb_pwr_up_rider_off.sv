@@ -1,5 +1,8 @@
 module Segway_tb();
 
+localparam GO = 8'h67;
+localparam STOP = 8'h73;
+
 //// Interconnects to DUT/support defined as type wire /////
 wire SS_n,SCLK,MOSI,MISO,INT;				// to inertial sensor
 wire A2D_SS_n,A2D_SCLK,A2D_MOSI,A2D_MISO;	// to A2D converter
@@ -48,48 +51,104 @@ Segway iDUT(.clk(clk),.RST_n(RST_n),.LED(),.INERT_SS_n(SS_n),.INERT_MOSI(MOSI),
 //// You need something to send the 'g' for go ////////////////
 UART_tx iTX(.clk(clk),.rst_n(RST_n),.TX(RX_TX),.trmt(send_cmd),.tx_data(cmd),.tx_done(cmd_sent));
 
+//
+// Power up and rider off conditions
+//
+// 1. rider off, send GO to power on "balance state"
+// 2. rider goes on, steering should not enabled yet because we need to wait for some time
+// 3. send STOP with rider on, pwr should not deassert 
+// 4. rider min weight is not meet so pwr off
+// 5. Go back to riding state, rider steps off and STOP is received. Go directly to pwr off
+// 6. Go back to riding state, rider falls off, en_steer should disable but keep pwr on
+// 7. Rider steps back on and steering is enabled.
+//
 initial begin
 	Initialize();
   	@(negedge clk);
  	 RST_n = 1;
 	////// Start issuing commands to DUT //////
 
-	// Setting rider_off should not affect pwr_up going high
-	iDUT.i_steer_en.rider_off = 1;
+	// Currently rider is off; rider_off = 1 should not affect pwr_up going high
 	// pwr_up should assert
-  	SendCmd(8'h67);
-	repeat(100) @(posedge clk);
+  	SendCmd(GO);
+	repeat(1000) @(posedge clk);
   	if (iDUT.i_Auth_blk.pwr_up != 1) begin
 		$display("FAIL 1: pwr_up from AUTH_blk not asserted");
+		$stop();
 	end 
 
-	// pwr_up should not be desserted because rider is not off
-	iDUT.i_steer_en.rider_off = 0;
-	SendCmd(8'h73);
-	repeat(100) @(posedge clk);
-  	if (iDUT.i_Auth_blk.pwr_up != 1) begin
-		$display("FAIL 2: pwr_up from AUTH_blk should still be asserted because rider_off = 0");
+	// Rider goes on board
+	lft_cell_set = 12'h105;
+	rght_cell_set = 12'h105;
+	@(negedge iDUT.i_Digital_core.i_steer_en.rider_off);
+
+
+	// Steering should not be enabled yet, need to wait until stable (1.3 seconds in real world)
+  	if (iDUT.i_Digital_core.en_steer_w != 0) begin
+		$display("FAIL 2: steering should not be enabled yet.");
+		$stop();
 	end
 
-	// pwr_up should still be deasserted
-	iDUT.i_steer_en.rider_off = 1;
-	repeat(100) @(posedge clk);
-  	if (iDUT.i_Auth_blk.pwr_up != 0) begin
-		$display("FAIL 3: pwr_up from AUTH_blk should not be asserted because rider_off is now 1");
+	// wait for steering to enable
+	@(posedge iDUT.i_Digital_core.en_steer_w);
+
+	// pwr_up should not desserted if we send 's' because rider is still on
+	SendCmd(STOP);
+	repeat(50000) @(posedge clk);
+  	if (iDUT.i_Auth_blk.pwr_up != 1) begin
+		$display("FAIL 3: pwr_up from AUTH_blk should still be asserted because rider is on");
+		$stop();
+	end
+
+	// pwr_up should deassert
+	lft_cell_set = 12'h080;
+	rght_cell_set = 12'h105;
+	repeat(50000) @(posedge clk);
+  	if (iDUT.i_Auth_blk.pwr_up != 0 || iDUT.i_Digital_core.en_steer_w != 0) begin
+		$display("FAIL 4: pwr_up from AUTH_blk should not be asserted because rider stepped off");
+		$stop();
 	end
 	
-	// Go back to power on state
-	iDUT.i_steer_en.rider_off = 0;
-	SendCmd(8'h63);
-	repeat(100) @(posedge clk);
+	// Go back to power on state with rider on
+	lft_cell_set = 12'h110;
+	rght_cell_set = 12'h105;
+	SendCmd(GO);
+	repeat(50000) @(posedge clk);
 	
 	// rider is off and 's' is recieved. Go directly to off
-	iDUT.i_steer_en.rider_off = 1;
-	SendCmd(8'h73);
-	repeat(100) @(posedge clk);
-  	if (iDUT.i_Auth_blk.pwr_up != 0) begin
-		$display("FAIL 2: pwr_up from AUTH_blk should still be asserted because rider_off = 0");
+	lft_cell_set = 12'h110;
+	rght_cell_set = 12'h005;
+	SendCmd(STOP);
+	repeat(50000) @(posedge clk);
+  	if (iDUT.i_Auth_blk.pwr_up != 0 || iDUT.i_Digital_core.en_steer_w != 0) begin
+		$display("FAIL 5: pwr_up from AUTH_blk should not be asserted because rider is on and 's' was sent.");
+		$stop();
 	end
+
+	// Go back to power on state with rider on
+	lft_cell_set = 12'h110;
+	rght_cell_set = 12'h105;
+	SendCmd(GO);
+	repeat(50000) @(posedge clk);
+	
+	// rider falls off; en_steer should be 0 and pwr should be on
+	lft_cell_set = 12'h110;
+	rght_cell_set = 12'h003;
+	repeat(50000) @(posedge clk);
+  	if (iDUT.i_Auth_blk.pwr_up != 1 || iDUT.i_Digital_core.en_steer_w != 0) begin
+		$display("FAIL 6: pwr_up from AUTH_blk should be asserted, but steering should be enabled. \"balancing state\".");
+		$stop();
+	end
+
+	// rider gets back on the segway to enable steering after falling off
+	lft_cell_set = 12'h110;
+	rght_cell_set = 12'h110;
+	repeat(50000) @(posedge clk);
+  	if (iDUT.i_Auth_blk.pwr_up != 1 || iDUT.i_Digital_core.en_steer_w != 1) begin
+		$display("FAIL 7: pwr_up from AUTH_blk should be asserted as well as steering.");
+		$stop();
+	end
+
 
 	$display("YAHOO! test passed!");
   	$stop();

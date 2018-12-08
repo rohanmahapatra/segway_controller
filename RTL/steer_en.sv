@@ -1,9 +1,9 @@
-module steer_en(clk,rst_n,lft_ld, rght_ld,ld_cell_diff,en_steer,rider_off, fast_sim);
+module steer_en#(parameter fast_sim = 0)(clk,rst_n,lft_ld, rght_ld,ld_cell_diff,en_steer,rider_off);
 
   input clk;				// 50MHz clock
   input rst_n;				// Active low asynch reset
   input [11:0] lft_ld, rght_ld;		// coming from the A2D interface
-  input fast_sim;           // Used to sped up simulation
+  //input fast_sim;           // Used to sped up simulation
   output [11:0] ld_cell_diff;
   output logic en_steer;	// enables steering (goes to balance_cntrl)
   output logic rider_off;	// pulses high for one clock on transition back to initial state

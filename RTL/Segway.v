@@ -61,10 +61,10 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   // Digital Core //
   /////////////////////////////////////
 
-  Digital_core i_Digital_core	(.clk(clk), .rst_n(rst_n), .pwr_up(pwr_up_w), .lft_ld(lft_ld_w), .rght_ld(rght_ld_w), .batt(batt_w), .nxt(nxt_w),
+  Digital_core #(.fast_sim(fast_sim)) i_Digital_core (.clk(clk), .rst_n(rst_n), .pwr_up(pwr_up_w), .lft_ld(lft_ld_w), .rght_ld(rght_ld_w), .batt(batt_w), .nxt(nxt_w),
 				.lft_spd(lft_spd_w), .rght_spd(rght_spd_w), .lft_rev(lft_rev), .rght_rev(rght_rev), .moving(moving_w),
 				.ovr_spd(ovr_spd_w), .batt_low(batt_low_w), .SS_n(INERT_SS_n), .SCLK(INERT_SCLK), .MOSI(INERT_MOSI),
-				.MISO(INERT_MISO), .INT(INT), .rider_off_w(rider_off_w), .fast_sim(fast_sim));
+				.MISO(INERT_MISO), .INT(INT), .rider_off_w(rider_off_w));
 
   /////////////////////////////////////
   // Piezo Driver //

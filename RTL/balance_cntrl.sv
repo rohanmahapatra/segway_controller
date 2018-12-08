@@ -1,5 +1,5 @@
-module balance_cntrl(clk,rst_n,vld,ptch,ld_cell_diff,lft_spd,lft_rev,
-                     rght_spd,rght_rev,rider_off, en_steer, pwr_up, too_fast, fast_sim);
+module balance_cntrl#(parameter fast_sim = 0)(clk,rst_n,vld,ptch,ld_cell_diff,lft_spd,lft_rev,
+                     rght_spd,rght_rev,rider_off, en_steer, pwr_up, too_fast);
 								
   input clk,rst_n;
   input vld;						// tells when a new valid inertial reading ready
@@ -8,7 +8,7 @@ module balance_cntrl(clk,rst_n,vld,ptch,ld_cell_diff,lft_spd,lft_rev,
   input rider_off;					// High when weight on load cells indicates no rider
   input en_steer;
   input pwr_up;					// enables the entire module
-  input fast_sim;				// use faster integration
+  //input fast_sim;				// use faster integration
   output [10:0] lft_spd;			// 11-bit unsigned speed at which to run left motor
   output lft_rev;					// direction to run left motor (1==>reverse)
   output [10:0] rght_spd;			// 11-bit unsigned speed at which to run right motor
@@ -89,7 +89,7 @@ module balance_cntrl(clk,rst_n,vld,ptch,ld_cell_diff,lft_spd,lft_rev,
   else integrator_reg <= integrator_reg_input;
   end 
 
-	assign integrator = fast_sim ? integrator_reg[17:2] : integrator_reg[17:6];
+  assign integrator = integrator_reg[17:6];
 
   //// D of PID 
 
@@ -112,7 +112,7 @@ module balance_cntrl(clk,rst_n,vld,ptch,ld_cell_diff,lft_spd,lft_rev,
   //// PID MATH - Summing all the terms and calculating torque by adding / subtracting load cell difference
   assign ptch_P_term_sgn_ext = {ptch_P_term[14], ptch_P_term};
   assign ptch_D_term_sgn_ext = {{3{ptch_D_term[12]}}, ptch_D_term};
-  assign integrator_sgn_ext = {{4{integrator[11]}} ,integrator};
+  assign integrator_sgn_ext = (fast_sim) ? integrator_reg[17:2] : {{4{integrator[11]}} ,integrator};
   assign ld_cell_diff_sgn_ext = {{7{ld_cell_diff[11]}},ld_cell_diff[11:3]};
   assign PID_cntrl = ptch_P_term_sgn_ext + ptch_D_term_sgn_ext + integrator_sgn_ext;	// sum of all 3 PID terms
   assign lft_torque = en_steer ? (PID_cntrl - ld_cell_diff_sgn_ext) : PID_cntrl;	// if no steering then output is directly PID cntrol

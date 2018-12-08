@@ -80,6 +80,9 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   mtr_drv i_mtr_drv (.clk(clk), .rst_n(rst_n), .lft_spd(lft_spd_w), .lft_rev(lft_rev), .PWM_rev_lft(PWM_rev_lft), .PWM_frwrd_lft(PWM_frwrd_lft),
 	 .rght_spd(rght_spd_w), .rght_rev(rght_rev), .PWM_rev_rght(PWM_rev_rght), .PWM_frwrd_rght(PWM_frwrd_rght));
 
+assign LED[6:1] = pwr_up_w;
+assign LED[7] = ovr_spd_w;
+assign LED[0] = batt_low_w;
 
 
 endmodule

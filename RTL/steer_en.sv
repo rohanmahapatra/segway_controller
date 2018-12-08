@@ -49,7 +49,7 @@ assign diff_gt_1_4 = (rider_weight_abs > (lft_ld + rght_ld)/4);
 
 assign diff_gt_15_16 = (rider_weight_abs > 15*((lft_ld + rght_ld)/16));
 
-assign ld_cell_diff = rider_weight_abs;
+assign ld_cell_diff = lft_ld - rght_ld;
 
 
 //

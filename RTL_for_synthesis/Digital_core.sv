@@ -65,7 +65,7 @@ inert_intf i_inert_intr (.clk(clk), .rst_n(rst_n), .vld(vld_w), .ptch(ptch_w), .
 // vld, ptch, SS_n, MOSI, SCLK -output ; MISO,INT - input
 
 
-balance_cntrl #(.fast_sim(fast_sim)) i_balance_cntr(.clk(clk), .rst_n(rst_n),.vld(vld_w),.ptch(ptch_w),.ld_cell_diff(ld_cell_difif_reg),.lft_spd(lft_spd_wire),.lft_rev(lft_rev_wire),
+balance_cntrl #(.fast_sim(fast_sim)) i_balance_cntr(.clk(clk), .rst_n(rst_n),.vld(vld_w),.ptch(ptch_w),.ld_cell_diff(ld_cell_diff_reg),.lft_spd(lft_spd_wire),.lft_rev(lft_rev_wire),
 		              .rght_spd(rght_spd_wire),.rght_rev(rght_rev_wire),.rider_off(rider_off_w), .en_steer(en_steer_reg), .pwr_up(pwr_up), .too_fast(ovr_spd));
 // vld, rider_off, en_steer - input ; ptch, ld_cell_diff - signed input;
 // lft_spd, rght_spd, lft_rev, rght_rev - output

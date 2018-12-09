@@ -70,7 +70,7 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   // Piezo Driver //
   /////////////////////////////////////
 
-  piezo_drv i_peizo_drv (.clk(clk), .rst_n(rst_n), .moving(moving_w), .ovr_spd(ovr_spd_w), .batt_low(batt_low_w), .audio_o(audio_o_w), .audio_o_n(audio_o_n_w));
+  piezo_drv i_piezo_drv (.clk(clk), .rst_n(rst_n), .moving(moving_w), .ovr_spd(ovr_spd_w), .batt_low(batt_low_w), .audio_o(audio_o_w), .audio_o_n(audio_o_n_w));
 
   /////////////////////////////////////
   // MTR_DRV //

@@ -53,7 +53,7 @@ end
 
 always @(posedge clk, negedge rst_n) begin
 	if (!rst_n)
-		batt <= 12'h000;
+		batt <= 12'hFFF;
 	else if (batt_load)
 		batt <= rd_data[11:0];
 	else

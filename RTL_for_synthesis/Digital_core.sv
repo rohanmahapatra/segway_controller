@@ -92,7 +92,7 @@ end
 
 always @ (posedge clk, negedge rst_n) begin
 	if (!rst_n) begin
-		ld_cell_diff_reg <= 1'b0;
+		ld_cell_diff_reg <= 12'b0;
 		en_steer_reg <= 1'b0;
 	end
 	else begin	

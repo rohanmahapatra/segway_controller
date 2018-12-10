@@ -4,7 +4,7 @@ module steer_en#(parameter fast_sim = 0)(clk,rst_n,lft_ld, rght_ld,ld_cell_diff,
   input rst_n;				// Active low asynch reset
   input [11:0] lft_ld, rght_ld;		// coming from the A2D interface
   //input fast_sim;           // Used to sped up simulation
-  output [11:0] ld_cell_diff;
+  output reg [11:0] ld_cell_diff;
   output logic en_steer;	// enables steering (goes to balance_cntrl)
   output logic rider_off;	// pulses high for one clock on transition back to initial state
 
@@ -22,11 +22,14 @@ reg [25:0] count;
 
 localparam MIN_RIDER_WEIGHT = 12'h200;	// to be updated - error
 
+  wire [11:0] ld_cell_diff_w;
+  reg [11:0] ld_add;
+  wire [11:0] ld_add_w;
 // code begins
 //
 
-assign sum_gt_min = ((lft_ld + rght_ld) > MIN_RIDER_WEIGHT) ? 1'b1 : 1'b0;
-assign sum_lt_min = ((lft_ld + rght_ld) < MIN_RIDER_WEIGHT) ? 1'b1 : 1'b0;
+assign sum_gt_min = ((ld_add) > MIN_RIDER_WEIGHT) ? 1'b1 : 1'b0;
+assign sum_lt_min = ((ld_add) < MIN_RIDER_WEIGHT) ? 1'b1 : 1'b0;
 
 /*
 always @ (posedge clk, negedge rst_n) begin
@@ -42,14 +45,35 @@ wire [11:0] rider_weight, rider_weight_abs;
 
 
 ////////////////////////////////////////////////////// we might need to flop these signals ///////////////////////////////////
-assign rider_weight = lft_ld - rght_ld;
+assign rider_weight = ld_cell_diff;
 assign rider_weight_abs = rider_weight[11] ? ((~rider_weight)+1'b1) : rider_weight;
 
-assign diff_gt_1_4 = (rider_weight_abs > (lft_ld + rght_ld)/4);
+assign diff_gt_1_4 = (rider_weight_abs > (ld_add/4));
 
-assign diff_gt_15_16 = (rider_weight_abs > 15*((lft_ld + rght_ld)/16));
+assign diff_gt_15_16 = (rider_weight_abs > 15*(ld_add/16));
 
-assign ld_cell_diff = lft_ld - rght_ld;
+
+
+//assign ld_cell_diff = lft_ld - rght_ld;
+//assign ld_add = lft_ld + rght_ld;
+
+assign ld_cell_diff_w = lft_ld - rght_ld;
+assign ld_add_w = lft_ld + rght_ld;
+
+
+always @ (posedge clk, negedge rst_n) begin
+	if (!rst_n) begin
+		ld_cell_diff <= 12'b0;
+		ld_add <=12'b0;
+	end
+	else begin
+		ld_cell_diff <= ld_cell_diff_w;
+		ld_add <= ld_add_w;
+	end
+
+
+end
+
 
 
 //

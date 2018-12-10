@@ -32,23 +32,27 @@ module balance_cntrl#(parameter fast_sim = 0)(clk,rst_n,vld,ptch,ld_cell_diff,lf
   wire [17:0]integrator_reg_input;
   wire ov;
   wire [17:0]sum_I_term;
-  wire signed [9:0] ptch_D_diff_wire;
-  reg signed [9:0] ptch_D_diff;
+  wire signed [9:0] ptch_D_diff;
   wire signed [6:0]ptch_D_diff_sat;
-  wire [12:0]ptch_D_term;
+  reg [12:0]ptch_D_term;
+  wire [12:0]ptch_D_term_wire;
   wire [15:0]ptch_P_term_sgn_ext;
   wire [15:0]ptch_D_term_sgn_ext;
   wire [15:0]integrator_sgn_ext;
   wire [15:0]ld_cell_diff_sgn_ext;
   wire [15:0]PID_cntrl;
-  wire signed[15:0]lft_torque;
-  wire signed[15:0]rght_torque;
+  wire signed[15:0]lft_torque_wire;
+  reg signed[15:0]lft_torque;
+  wire signed[15:0]rght_torque_wire;
+  reg signed[15:0]rght_torque;
   wire [15:0]lft_torque_abs;
   wire [15:0]rght_torque_abs;
   wire lft_duty_mux;				// to choose between GAIN_MULTIPLIER option or MIN_DUTY
   wire rght_duty_mux;
-  wire [15:0]lft_shaped;			
-  wire [15:0]rght_shaped;
+  wire [15:0]lft_shaped_w;			
+  reg [15:0]lft_shaped;			
+  wire [15:0]rght_shaped_w;
+  reg [15:0]rght_shaped;
   wire [15:0]lft_shaped_abs;
   wire [15:0]rght_shaped_abs;
 
@@ -112,13 +116,13 @@ module balance_cntrl#(parameter fast_sim = 0)(clk,rst_n,vld,ptch,ld_cell_diff,lf
   end
 
   
-  assign ptch_D_diff_wire = ptch_err_sat - prev_ptch_err;
+  assign ptch_D_diff = ptch_err_sat - prev_ptch_err;
   
   always @ (posedge clk, negedge rst_n) begin
 	if (!rst_n) 
-		ptch_D_diff <= 10'b0;
+		ptch_D_term <= 10'b0;
 	else
-		ptch_D_diff <= ptch_D_diff_wire;
+		ptch_D_term <= ptch_D_term_wire;
   end 
   
   
@@ -126,7 +130,7 @@ module balance_cntrl#(parameter fast_sim = 0)(clk,rst_n,vld,ptch,ld_cell_diff,lf
   
   
   assign ptch_D_diff_sat = (ptch_D_diff[9] && ~&ptch_D_diff[8:6]) ? 7'h40 : (~ptch_D_diff[9] && |ptch_D_diff[8:6]) ? 7'h3F : ptch_D_diff[6:0]; 
-  assign ptch_D_term = ptch_D_diff_sat * $signed(D_COEFF); 
+  assign ptch_D_term_wire = ptch_D_diff_sat * $signed(D_COEFF); 
 
 
   //// PID MATH - Summing all the terms and calculating torque by adding / subtracting load cell difference
@@ -135,8 +139,27 @@ module balance_cntrl#(parameter fast_sim = 0)(clk,rst_n,vld,ptch,ld_cell_diff,lf
   assign integrator_sgn_ext = (fast_sim) ? integrator_reg[17:2] : {{4{integrator[11]}} ,integrator};
   assign ld_cell_diff_sgn_ext = {{7{ld_cell_diff[11]}},ld_cell_diff[11:3]};
   assign PID_cntrl = ptch_P_term_sgn_ext + ptch_D_term_sgn_ext + integrator_sgn_ext;	// sum of all 3 PID terms
-  assign lft_torque = en_steer ? (PID_cntrl - ld_cell_diff_sgn_ext) : PID_cntrl;	// if no steering then output is directly PID cntrol
-  assign rght_torque = en_steer ? (PID_cntrl + ld_cell_diff_sgn_ext) : PID_cntrl;
+  
+  
+  assign lft_torque_wire = en_steer ? (PID_cntrl - ld_cell_diff_sgn_ext) : PID_cntrl;	// if no steering then output is directly PID cntrol
+  assign rght_torque_wire = en_steer ? (PID_cntrl + ld_cell_diff_sgn_ext) : PID_cntrl;
+  
+  
+  always @ (posedge clk, negedge rst_n) begin
+	if(!rst_n) begin
+		lft_torque <= 16'b0;
+		rght_torque <= 16'b0; 
+	end
+	else begin
+		lft_torque <= lft_torque_wire;
+		rght_torque <= rght_torque_wire;
+	end
+  end
+  
+  
+  
+  
+  
   
   //// TORQUE and DUTY CYCLE
   assign lft_torque_abs = lft_torque[15] ? -lft_torque : lft_torque;			
@@ -147,10 +170,28 @@ module balance_cntrl#(parameter fast_sim = 0)(clk,rst_n,vld,ptch,ld_cell_diff,lf
   // if the torue lies in low band then it needs to be multiplied by GAIN_MULTIPLIER otherwise we add/sub MIN_DUTY to it.
   // if torque is positive we add MIN_DUTY to it otherwise subtract
 
-  assign lft_shaped = lft_duty_mux ? (lft_torque[15] ? (lft_torque - MIN_DUTY) : (MIN_DUTY + lft_torque)) :
+  assign lft_shaped_w = lft_duty_mux ? (lft_torque[15] ? (lft_torque - MIN_DUTY) : (MIN_DUTY + lft_torque)) :
 					lft_torque * $signed(GAIN_MULTIPLIER);
-  assign rght_shaped = rght_duty_mux ? (rght_torque[15] ? (rght_torque - MIN_DUTY) : (MIN_DUTY + rght_torque)) :
+  assign rght_shaped_w = rght_duty_mux ? (rght_torque[15] ? (rght_torque - MIN_DUTY) : (MIN_DUTY + rght_torque)) :
 					rght_torque * $signed(GAIN_MULTIPLIER);
+  
+ always @ (posedge clk, negedge rst_n) begin
+	if (!rst_n) begin
+		lft_shaped <= 16'b0;
+		rght_shaped <= 16'b0;
+	end
+	else begin
+		lft_shaped <= lft_shaped_w;
+		rght_shaped <= rght_shaped_w;
+	end
+
+ end	 
+				
+				
+				
+				
+				
+				
   assign lft_rev = lft_shaped[15];
   assign rght_rev = rght_shaped[15];
   assign lft_shaped_abs = lft_shaped[15] ? -lft_shaped : lft_shaped;
@@ -158,5 +199,12 @@ module balance_cntrl#(parameter fast_sim = 0)(clk,rst_n,vld,ptch,ld_cell_diff,lf
   assign lft_spd = (pwr_up) ? (|lft_shaped_abs[14:11]) ? 11'h7FF : lft_shaped_abs[10:0] : 11'h000;
   assign rght_spd =(pwr_up) ? (|rght_shaped_abs[14:11]) ? 11'h7FF : rght_shaped_abs[10:0] : 11'h000;
   assign too_fast = (lft_spd > 12'h600 || rght_spd > 12'h600) ? 1'b1 : 1'b0;
+
+
+
+
+
+
+
 
 endmodule 

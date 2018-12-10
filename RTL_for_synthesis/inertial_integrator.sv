@@ -16,6 +16,7 @@ logic signed[15:0]ptch_rt_comp;
 logic signed[25:0]ptch_acc_product;
 logic signed[26:0]fusion_ptch_offset;
 logic signed [15:0]AZ_comp;
+logic signed [15:0]AZ_comp_sub;
 logic signed[15:0]ptch_acc;
   /////////////////////////////////////////////
   // local params for increased flexibility //
@@ -44,9 +45,18 @@ assign ptch = ptch_int[26:11];
 
 
 ////////// PITCH Fusion ///////////////////////////
-assign ptch_acc_product= AZ_comp* $signed(327); 		//327 is fudge factor
+
+assign AZ_comp_sub = AZ - AZ_OFFSET;	
+
+
+always @ (posedge clk, negedge rst_n)
+	if(!rst_n) AZ_comp <= 16'b0;
+	else AZ_comp <= AZ_comp_sub; 
+
+assign ptch_acc_product= AZ_comp * $signed(327); 		//327 is fudge factor
 assign ptch_acc = {{3{ptch_acc_product[25]}},ptch_acc_product[25:13]};  		// pitch angle calculated from accel only
-assign AZ_comp = AZ - AZ_OFFSET;				
+//rohan comment and added above
+//assign AZ_comp = AZ - AZ_OFFSET;				
 
 
 always_comb begin

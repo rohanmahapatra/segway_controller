@@ -170,7 +170,7 @@ module Segway_tb();
 		//TEST 13: ovr_spd and battert low sound should assert (Battery is low and the rider is moving with a big lean foward)//
      		SendA2D(12'h205, 12'h205,12'h055);
 		SetLean(14'h1FFF);
-     		repeat(50000) @(posedge clk);
+     		repeat(36000) @(posedge clk);
     		if (iDUT.i_piezo_drv.moving == 0 || iDUT.i_piezo_drv.batt_low == 0 || iDUT.i_piezo_drv.ovr_spd == 0) begin
      			$display("FAIL 13: Piezo Did not indicate over speed and battery low?");
 			$stop();

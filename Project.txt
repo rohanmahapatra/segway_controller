@@ -22,20 +22,20 @@ Design Heirarchy
 
 Sl No.	    Tests				Descriptions
 
-1.	PASS: A2D intf				
-2.	PASS: hoffman_lean
-3.	PASS: lean_backward
-4. 	PASS: lean_forward
-5. 	PASS: lft_turn
-6.  	PASS: piezo_drv
-7. 	PASS: pwr_up_rider_off
-8. 	PASS: pwr_up
-9. 	PASS: rght_turn
-10.	PASS: steering_en
+1.	PASS: A2D intf				Verifies the A2D converter receives the correct data for the correct channel	
+2.	PASS: hoffman_lean			Runs the stimulus Prof. Hoffman gave in TestingSegway.pdf
+3.	PASS: lean_backward			Starts at 0 lean and decrease lean using a step of 1000 decimal until maxed. Checks for convergence.
+4.	PASS: lean_forward			Starts at 0 lean and increases lean using a step of 1000 decimal until maxed. Checks for convergence.
+5. 	PASS: lft_turn				Makes forward and backward left leaning turns at varying speeds.
+6.  	PASS: piezo_drv				Checks over speed, moving, and battery low conditons.
+7. 	PASS: pwr_up_rider_off			Checks power up and steering conditions with respect to rider off and auth signals
+8. 	PASS: pwr_up				Verifies UART and power up conditions. Unsures only 'g' and 's' are valid auth signals
+9. 	PASS: rght_turn				Makes forward and backward right leaning turns at varying speeds.
+10.	PASS: steering_en			Checks steering enable conditions.
 
 
 Code Coverage
-
+Based on the code coverage we found we were not testing when both ovr_spd and batt_low are asserted. We updated our piezo_drv test bench to check this conditon.
 
 
 Post Synthesis Results

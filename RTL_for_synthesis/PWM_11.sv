@@ -73,7 +73,7 @@ begin
 	s = 0;
 	r = 1;
 end
-else if (count == 0)
+else 
 begin
 	s = 1;
 	r = 0;

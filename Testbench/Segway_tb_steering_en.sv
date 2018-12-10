@@ -129,8 +129,10 @@ initial begin
 		$stop();
 	end
 
-	$display("YAHOO! test passed!");
-	  	$stop();
+    $display("==========================================");
+	$display("PASS: steering_en");
+    $display("==========================================");
+	$stop();
 end
 
 always begin

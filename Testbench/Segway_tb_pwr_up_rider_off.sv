@@ -25,19 +25,19 @@ wire cmd_sent;
 
 ////////////////////////////////////////////////////////////////
 // Instantiate Physical Model of Segway with Inertial sensor //
-//////////////////////////////////////////////////////////////	
+//////////////////////////////////////////////////////////////
 SegwayModel iPHYS(.clk(clk),.RST_n(RST_n),.SS_n(SS_n),.SCLK(SCLK),
                   .MISO(MISO),.MOSI(MOSI),.INT(INT),.PWM_rev_rght(PWM_rev_rght),
 				  .PWM_frwrd_rght(PWM_frwrd_rght),.PWM_rev_lft(PWM_rev_lft),
-				  .PWM_frwrd_lft(PWM_frwrd_lft),.rider_lean(rider_lean));				  
+				  .PWM_frwrd_lft(PWM_frwrd_lft),.rider_lean(rider_lean));
 
 /////////////////////////////////////////////////////////
 // Instantiate Model of A2D for load cell and battery //
 ///////////////////////////////////////////////////////
-ADC128S iA2D(.clk(clk), .rst_n(RST_n), .SS_n(A2D_SS_n), .SCLK(A2D_SCLK), .MISO(A2D_MISO), 
+ADC128S iA2D(.clk(clk), .rst_n(RST_n), .SS_n(A2D_SS_n), .SCLK(A2D_SCLK), .MISO(A2D_MISO),
 		.MOSI(A2D_MOSI), .batt_set(batt_set), .lft_cell_set(lft_cell_set), .rght_cell_set(rght_cell_set));
-  
-  
+
+
 ////// Instantiate DUT ////////
 Segway iDUT(.clk(clk),.RST_n(RST_n),.LED(),.INERT_SS_n(SS_n),.INERT_MOSI(MOSI),
             .INERT_SCLK(SCLK),.INERT_MISO(MISO),.A2D_SS_n(A2D_SS_n),
@@ -46,7 +46,7 @@ Segway iDUT(.clk(clk),.RST_n(RST_n),.LED(),.INERT_SS_n(SS_n),.INERT_MOSI(MOSI),
 			.PWM_rev_lft(PWM_rev_lft),.PWM_frwrd_lft(PWM_frwrd_lft),
 			.piezo_n(piezo_n),.piezo(piezo),.RX(RX_TX));
 
-	
+
 //// Instantiate UART_tx (mimics command from BLE module) //////
 //// You need something to send the 'g' for go ////////////////
 UART_tx iTX(.clk(clk),.rst_n(RST_n),.TX(RX_TX),.trmt(send_cmd),.tx_data(cmd),.tx_done(cmd_sent));
@@ -56,7 +56,7 @@ UART_tx iTX(.clk(clk),.rst_n(RST_n),.TX(RX_TX),.trmt(send_cmd),.tx_data(cmd),.tx
 //
 // 1. rider off, send GO to power on "balance state"
 // 2. rider goes on, steering should not enabled yet because we need to wait for some time
-// 3. send STOP with rider on, pwr should not deassert 
+// 3. send STOP with rider on, pwr should not deassert
 // 4. rider min weight is not meet so pwr off
 // 5. Go back to riding state, rider steps off and STOP is received. Go directly to pwr off
 // 6. Go back to riding state, rider falls off, en_steer should disable but keep pwr on
@@ -75,7 +75,7 @@ initial begin
   	if (iDUT.i_Auth_blk.pwr_up != 1) begin
 		$display("FAIL 1: pwr_up from AUTH_blk not asserted");
 		$stop();
-	end 
+	end
 
 	// Rider goes on board
 	lft_cell_set = 12'h105;
@@ -108,13 +108,13 @@ initial begin
 		$display("FAIL 4: pwr_up from AUTH_blk should not be asserted because rider stepped off");
 		$stop();
 	end
-	
+
 	// Go back to power on state with rider on
 	lft_cell_set = 12'h110;
 	rght_cell_set = 12'h105;
 	SendCmd(GO);
 	repeat(50000) @(posedge clk);
-	
+
 	// rider is off and 's' is recieved. Go directly to off
 	lft_cell_set = 12'h110;
 	rght_cell_set = 12'h005;
@@ -130,7 +130,7 @@ initial begin
 	rght_cell_set = 12'h105;
 	SendCmd(GO);
 	repeat(50000) @(posedge clk);
-	
+
 	// rider falls off; en_steer should be 0 and pwr should be on
 	lft_cell_set = 12'h110;
 	rght_cell_set = 12'h003;
@@ -150,7 +150,9 @@ initial begin
 	end
 
 
-	$display("YAHOO! test passed!");
+    $display("==========================================");
+	$display("PASS: pwr_up_rider_off");
+    $display("==========================================");
   	$stop();
 end
 
@@ -160,7 +162,4 @@ end
 
 `include "tb_tasks.v"
 
-endmodule	
-
-
-
+endmodule

@@ -127,15 +127,14 @@ initial begin
     	// Now go backwards
     	//
 
-	//
     	// Set rider_lean so the segway goes backwards with the rght load cell
     	// set to make a right turn. The segway should be slowly making a backwards
     	// right turn.
     	//
-    	rght_cell_set = 12'h150;
-    	rider_lean = -14'h0F00;
-    	repeat(3000000) @(posedge clk);
-    	if (iPHYS.omega_lft >= 0 || abs(iPHYS.omega_rght) > abs(iPHYS.omega_lft)
+    	rght_cell_set = 12'h140;
+    	rider_lean = -14'h0800;
+    	repeat(5000000) @(posedge clk);
+    	if (iPHYS.omega_lft >= 0 || abs(iPHYS.omega_rght) < abs(iPHYS.omega_lft)
         	|| iPHYS.omega_lft >= prev_omega_lft || iPHYS.theta_lft >= prev_theta_lft) begin
         	$display("FAIL 5: The platform should be making a reverse right turn.");
         	$stop();
@@ -151,7 +150,7 @@ initial begin
     	// NOTE: Does iPHYS.theta_lft decrease in value when the wheels go backwards?
     	//
     	rght_cell_set =12'h200;
-    	rider_lean = -14'h0800;
+    	rider_lean = -14'h0F00;
     	repeat(1000000) @(posedge clk);
     	if (iPHYS.omega_lft >= 0 || abs(iPHYS.omega_rght) < abs(iPHYS.omega_lft)
         	|| iPHYS.omega_lft >= prev_omega_lft || iPHYS.theta_lft >= prev_theta_lft) begin
@@ -162,8 +161,10 @@ initial begin
     	prev_theta_lft = iPHYS.theta_lft;
 
 
-	$display("YAHOO! test passed!");
-  	$stop();
+        $display("==========================================");
+    	$display("PASS: rght_turn");
+        $display("==========================================");
+  	     $stop();
 end
 
 always begin

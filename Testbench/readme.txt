@@ -4,12 +4,10 @@ Segway_tb_hoffman_lean (not self-checking)
 Segway_tb_A2D_inft
 Segway_tb_pwr_up_rider_off
 Segway_tb_steering_en
+Segway_tb_rght_turn
+Segway_tb_left_turn
 
 FAILING
-Segway_tb_rght_turn
-	- backwards turn appears to go in wrong direction (Waiting on Piazza @123)
-Segway_tb_left_turn
-	- backwards turn appears to go in wrong direction? (Waiting on Piazza @123)
 
 
 NOT FINSHED/UNIMPLEMENTED

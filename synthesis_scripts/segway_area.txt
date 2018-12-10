@@ -1,0 +1,31 @@
+ 
+****************************************
+Report : area
+Design : Segway
+Version: N-2017.09-SP5
+Date   : Mon Dec 10 09:39:37 2018
+****************************************
+
+Information: Updating design information... (UID-85)
+Library(s) Used:
+
+    tcbn40lpbwptc (File: /cae/apps/data/tsmclibs-2013/digital/Front_End/timing_power_noise/NLDM/tcbn40lpbwp_120b/tcbn40lpbwptc.db)
+
+Number of ports:                           26
+Number of nets:                          2883
+Number of cells:                         2805
+Number of combinational cells:           2316
+Number of sequential cells:               489
+Number of macros/black boxes:               0
+Number of buf/inv:                        735
+Number of references:                     197
+
+Combinational area:               3046.251630
+Buf/Inv area:                      532.904413
+Noncombinational area:            2164.075211
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:                  5210.326841
+Total area:                 undefined
+1

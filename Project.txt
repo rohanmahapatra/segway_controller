@@ -1,0 +1,41 @@
+Team Name: Apple
+
+Design Heirarchy
+
+--Segway
+	--rst_synch
+	--Auth_blk
+		--UART_rcv
+	--A2D_Intf
+		--SPI_mstr
+	--Digital_Core
+		--Balance_Cntrl
+		--Steen_en
+		--Inter_intr
+			--SPI_mstr
+			--Intertial_integration
+	--Piezo_drv
+	--Mtr_drv
+
+
+
+
+Sl No.	    Tests				Descriptions
+
+1.	PASS: A2D intf				
+2.	PASS: hoffman_lean
+3.	PASS: lean_backward
+4. 	PASS: lean_forward
+5. 	PASS: lft_turn
+6.  	PASS: piezo_drv
+7. 	PASS: pwr_up_rider_off
+8. 	PASS: pwr_up
+9. 	PASS: rght_turn
+10.	PASS: steering_en
+
+
+Code Coverage
+
+
+
+Post Synthesis Results

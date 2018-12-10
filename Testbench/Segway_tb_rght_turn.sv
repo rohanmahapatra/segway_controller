@@ -113,7 +113,7 @@ initial begin
     	// in the previous test
     	rght_cell_set = 12'h120;
     	rider_lean = 14'h0800;
-    	repeat(2000000) @(posedge clk);
+    	repeat(1000000) @(posedge clk);
     	if (iPHYS.omega_lft <= 0 || iPHYS.theta_lft <= 0 || iPHYS.omega_rght >= iPHYS.omega_lft
         	|| iPHYS.omega_lft >= prev_omega_lft) begin
         	$display("FAIL 4: The platform should be making a slower right turn.");
@@ -133,7 +133,7 @@ initial begin
     	//
     	rght_cell_set = 12'h140;
     	rider_lean = -14'h0800;
-    	repeat(5000000) @(posedge clk);
+    	repeat(4000000) @(posedge clk);
     	if (iPHYS.omega_lft >= 0 || abs(iPHYS.omega_rght) < abs(iPHYS.omega_lft)
         	|| iPHYS.omega_lft >= prev_omega_lft || iPHYS.theta_lft >= prev_theta_lft) begin
         	$display("FAIL 5: The platform should be making a reverse right turn.");
@@ -168,7 +168,7 @@ initial begin
 end
 
 always begin
-  #5 clk = ~clk;
+  #10 clk = ~clk;
 end
 
 function [15:0] abs([15:0] val);

@@ -129,14 +129,14 @@ initial begin
 		$stop();
 	end
 
-    $display("==========================================");
+    	$display("==========================================");
 	$display("PASS: steering_en");
-    $display("==========================================");
+    	$display("==========================================");
 	$stop();
 end
 
 always begin
-  #5 clk = ~clk;
+  #10 clk = ~clk;
 end
 
 `include "tb_tasks.v"

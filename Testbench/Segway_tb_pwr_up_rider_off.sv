@@ -150,14 +150,14 @@ initial begin
 	end
 
 
-    $display("==========================================");
+    	$display("==========================================");
 	$display("PASS: pwr_up_rider_off");
-    $display("==========================================");
+    	$display("==========================================");
   	$stop();
 end
 
 always begin
-  #5 clk = ~clk;
+  #10 clk = ~clk;
 end
 
 `include "tb_tasks.v"

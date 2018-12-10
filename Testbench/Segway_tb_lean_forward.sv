@@ -1,6 +1,6 @@
 module Segway_tb();
 
-localparam  PLAT_ERROR = 16'h1000;
+localparam  PLAT_ERROR = 16'h0800;
 localparam MIN_LOAD_SENSOR = 12'h200;  // left_load + rght_load >= 0x200
 
 //// Interconnects to DUT/support defined as type wire /////
@@ -28,19 +28,19 @@ reg done;	// Only used for loop iteration display in waveform
 
 ////////////////////////////////////////////////////////////////
 // Instantiate Physical Model of Segway with Inertial sensor //
-//////////////////////////////////////////////////////////////	
+//////////////////////////////////////////////////////////////
 SegwayModel iPHYS(.clk(clk),.RST_n(RST_n),.SS_n(SS_n),.SCLK(SCLK),
                   .MISO(MISO),.MOSI(MOSI),.INT(INT),.PWM_rev_rght(PWM_rev_rght),
 				  .PWM_frwrd_rght(PWM_frwrd_rght),.PWM_rev_lft(PWM_rev_lft),
-				  .PWM_frwrd_lft(PWM_frwrd_lft),.rider_lean(rider_lean));				  
+				  .PWM_frwrd_lft(PWM_frwrd_lft),.rider_lean(rider_lean));
 
 /////////////////////////////////////////////////////////
 // Instantiate Model of A2D for load cell and battery //
 ///////////////////////////////////////////////////////
-ADC128S iA2D(.clk(clk), .rst_n(RST_n), .SS_n(A2D_SS_n), .SCLK(A2D_SCLK), .MISO(A2D_MISO), 
+ADC128S iA2D(.clk(clk), .rst_n(RST_n), .SS_n(A2D_SS_n), .SCLK(A2D_SCLK), .MISO(A2D_MISO),
 		.MOSI(A2D_MOSI), .batt_set(batt_set), .lft_cell_set(lft_cell_set), .rght_cell_set(rght_cell_set));
-  
-  
+
+
 ////// Instantiate DUT ////////
 Segway iDUT(.clk(clk),.RST_n(RST_n),.LED(),.INERT_SS_n(SS_n),.INERT_MOSI(MOSI),
             .INERT_SCLK(SCLK),.INERT_MISO(MISO),.A2D_SS_n(A2D_SS_n),
@@ -49,14 +49,14 @@ Segway iDUT(.clk(clk),.RST_n(RST_n),.LED(),.INERT_SS_n(SS_n),.INERT_MOSI(MOSI),
 			.PWM_rev_lft(PWM_rev_lft),.PWM_frwrd_lft(PWM_frwrd_lft),
 			.piezo_n(piezo_n),.piezo(piezo),.RX(RX_TX));
 
-	
+
 //// Instantiate UART_tx (mimics command from BLE module) //////
 //// You need something to send the 'g' for go ////////////////
 UART_tx iTX(.clk(clk),.rst_n(RST_n),.TX(RX_TX),.trmt(send_cmd),.tx_data(cmd),.tx_done(cmd_sent));
 
 //
 // This test bench verifies the lean forward and back are working.
-// 
+//
 //
 //reg signed [15:0] omega_lft,omega_rght;				// angular velocities of wheels
 //reg signed [19:0] theta_lft,theta_rght;				// amount wheels have rotated since start
@@ -77,8 +77,8 @@ initial begin
 
 	//
 	// START TEST
-	// 
-	
+	//
+
 	// Right now lean = 0
 	// the platform should not be moving a lot, maybe some balancing
 	rider_lean = 14'h0000;
@@ -89,61 +89,37 @@ initial begin
 	end
 
 	//
-	// Increase lean using a step function. 
+	// Increase lean using a step function.
 	// will go from 0 lean to 14'h1FFF lean (approx 8000) in steps of 1000 decimal
-	// 
+	//
 	for (step = 1; step <= 8; step = step + 1) begin
-    		rider_lean = (step * 1000);
-		repeat(1000000) @(posedge clk);
+		rider_lean = (step * 1000);
+		// The big theta waveform "bump" is approx 100,000 clk after we set lean
+		repeat(100000) @(posedge clk);
+    		prev_theta = iPHYS.theta_platform;
+		repeat(800000) @(posedge clk);
 		done = 1;
 		@(posedge clk);
 		done = 0;
-/*
-		if (iPHYS.omega_lft <= 0 || iPHYS.theta_lft <= 0 || iPHYS.omega_rght >= iPHYS.omega_lft) begin
-			$display("FAIL 2: The platform should be making a right turn.");
+
+		// Check that we are converging on 0 and that we are closer to 0 at the end of the test then the beginning
+		if (abs(iPHYS.theta_platform) >= abs(prev_theta) || abs(iPHYS.omega_platform) >= PLAT_ERROR || abs(iPHYS.theta_platform) >= PLAT_ERROR) begin
+			$display("FAIL: %d The platform should be converging on zero.", step);
+            		$display("iPHYS.theta_platform: %d, iPHYS.omega_platform: %d, prev_omega: %d, prev_theta: %d", 
+                    		iPHYS.theta_platform, iPHYS.omega_platform, prev_omega, prev_theta);
 			$stop();
 		end
-*/
-    		prev_omega = iPHYS.omega_platform;
-    		prev_theta = iPHYS.theta_platform;
 	end
 
-	// Right now lean = 0
-	// the platform should not be moving a lot, maybe some balancing
-	rider_lean = 14'h0000;
-	repeat(1000000) @(posedge clk);
-/*
-	if (iDUT.i_Digital_core.en_steer_w != 1 || abs(iPHYS.theta_platform) > PLAT_ERROR || abs(iPHYS.omega_lft) > PLAT_ERROR || abs(iPHYS.omega_rght) > PLAT_ERROR) begin
-		$display("FAIL 1: The platform should only be balancing.");
-		$stop();
-	end
-*/	
 	
-	//
-	// Decrease lean using a step function. Steps of 1000 decimal
-	// 
-	for (step = 1; step <= 8; step = step + 1) begin
-    		rider_lean = (step * -1000);
-		repeat(1000000) @(posedge clk);
-		done = 1;
-		@(posedge clk);
-		done = 0;
-/*
-		if (iPHYS.omega_lft <= 0 || iPHYS.theta_lft <= 0 || iPHYS.omega_rght >= iPHYS.omega_lft) begin
-			$display("FAIL 2: The platform should be making a right turn.");
-			$stop();
-		end
-*/
-    		prev_omega = iPHYS.omega_platform;
-    		prev_theta = iPHYS.theta_platform;
-	end	
-	
-	$display("YAHOO! test passed!");
+    	$display("==========================================");
+	$display("PASS: lean_forward");
+    	$display("==========================================");
   	$stop();
 end
 
 always begin
-  #5 clk = ~clk;
+  #10 clk = ~clk;
 end
 
 function [15:0] abs([15:0] val);
@@ -152,9 +128,7 @@ function [15:0] abs([15:0] val);
 	end
 endfunction
 
+
 `include "tb_tasks.v"
 
-endmodule	
-
-
-
+endmodule

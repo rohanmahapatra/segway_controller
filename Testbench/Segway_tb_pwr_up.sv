@@ -99,7 +99,7 @@ initial begin
 end
 
 always begin
-  #5 clk = ~clk;
+  #10 clk = ~clk;
 end
 
 `include "tb_tasks.v"

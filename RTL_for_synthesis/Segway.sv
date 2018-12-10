@@ -10,8 +10,8 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   input RX;								// UART input from BLE module
 
 
- // output reg [7:0] LED;						// These are the 8 LEDs on the DE0, your choice what to do
-  output [7:0] LED;						// These are the 8 LEDs on the DE0, your choice what to do
+  output reg [7:0] LED;						// These are the 8 LEDs on the DE0, your choice what to do
+ // output [7:0] LED;						// These are the 8 LEDs on the DE0, your choice what to do
   output A2D_SS_n, INERT_SS_n;			// Slave selects to A2D and inertial sensor
   output A2D_MOSI, INERT_MOSI;			// MOSI signals to A2D and inertial sensor
   output A2D_SCLK, INERT_SCLK;			// SCLK signals to A2D and inertial sensor
@@ -71,7 +71,7 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   // Piezo Driver //
   /////////////////////////////////////
 
-  piezo_drv i_piezo_drv (.clk(clk), .rst_n(rst_n), .moving(moving_w), .ovr_spd(ovr_spd_w), .batt_low(batt_low_w), .audio_o(audio_o_w), .audio_o_n(audio_o_n_w));
+  piezo_drv i_piezo_drv (.clk(clk), .rst_n(rst_n), .moving(moving_w), .ovr_spd(ovr_spd_w), .batt_low(batt_low_w), .audio_o(piezo), .audio_o_n(piezo_n));
 
   /////////////////////////////////////
   // MTR_DRV //
@@ -81,7 +81,7 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
   mtr_drv i_mtr_drv (.clk(clk), .rst_n(rst_n), .lft_spd(lft_spd_w), .lft_rev(lft_rev), .PWM_rev_lft(PWM_rev_lft), .PWM_frwrd_lft(PWM_frwrd_lft),
 	 .rght_spd(rght_spd_w), .rght_rev(rght_rev), .PWM_rev_rght(PWM_rev_rght), .PWM_frwrd_rght(PWM_frwrd_rght));
 
-/*
+
  always @ (posedge clk, negedge rst_n) begin
 	 if (!rst_n) begin
 
@@ -97,5 +97,5 @@ module Segway(clk,RST_n,LED,INERT_SS_n,INERT_MOSI,
 	end
 
 end
-*/
+
 endmodule

@@ -82,7 +82,7 @@ end
 
 
  assign tmr_full = (fast_sim) ?
-                    ((cnt >= 26'h0003FFF) ? 1 : 0) : ((cnt >= 26'h3DFD240) ? 1 : 0);
+                    ((cnt >= 26'h0007FFF) ? 1 : 0) : ((cnt >= 26'h3DFD240) ? 1 : 0);
 
  // timer implementation - which counts until 1.3 seconds
 

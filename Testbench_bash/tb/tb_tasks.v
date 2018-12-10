@@ -39,8 +39,7 @@ task moveEn;
     SendCmd(8'h67);
     rght_cell_set = 12'h105;
     lft_cell_set = 12'h105;
-    //@(posedge iDUT.moving_w);
-    repeat(50000) @(posedge clk);
+    @(posedge iDUT.moving_w);
 	end
 endtask
 

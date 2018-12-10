@@ -1,5 +1,5 @@
 
-read_file -format sverilog { A2D_Intf.sv, balance_cntrl.sv, inertial_integrator.sv, mtr_drv.sv, PWM_11.sv, SPI_mstr16-1.sv, Auth_blk.sv, Digital_core.sv, inert_intf.sv, piezo_drv.sv,rst_synch.sv, steer_en.sv, UART_rcv.sv Segway.sv }  
+read_file -format sverilog { A2D_Intf.sv, balance_cntrl.sv, inertial_integrator.sv, mtr_drv.sv, PWM11.sv, SPI_mstr16.sv, Auth_blk.sv, Digital_core.sv, inert_intf.sv, piezo_drv.sv,rst_synch.sv, steer_en.sv, UART_rcv.sv, Segway.sv }  
 #read_file -format verilog Segway.v
 
 #read_file -format verilog Segway.v

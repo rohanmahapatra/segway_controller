@@ -2,7 +2,7 @@
 ls -l ./
 
 
-vlog -work work ../RTL_for_synthesis/*.sv ../RTL_for_synthesis/Segway.v
+vlog -work work ../RTL_for_synthesis/*.sv
 vlog -work work ../submodules/*.sv
 
 for i in ./tb/*.sv; do

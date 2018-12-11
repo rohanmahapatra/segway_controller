@@ -48,7 +48,7 @@ logic ready;
 
 // *****************************************//
 
-typedef enum reg [3:0] { INIT1, INIT2, INIT3, INIT4, PTCHL,PTCHL_INIT, PTCHH, AZL, AZH } state_t;
+typedef enum reg [3:0] { INIT1, INIT2, INIT3, INIT4, PTCHL,PTCHL_INIT, PTCHH, AZL, AZH , DONE } state_t;
 
 state_t ns, ps;
 
@@ -173,7 +173,9 @@ always_comb begin
 
 		
 
-		AZH:  		if (done) begin azhw = 1; ns = PTCHL_INIT; vldw = 1; ready = 1; end else ns = AZH;
+		AZH:  		if (done) begin azhw = 1; ns = DONE;  end else ns = AZH;
+
+		DONE: begin ready = 1; vldw = 1; ns = PTCHL_INIT; end
 
 		default: 	ns = INIT1;
 

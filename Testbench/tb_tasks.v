@@ -1,3 +1,4 @@
+/*
 task Initialize;
 	begin
 		clk = 0;
@@ -78,3 +79,48 @@ task getPlatformTheta;
     end
 endtask
 */
+
+task Initialize;
+
+  begin
+    send_cmd = 0;
+clr_peak_mins_n = 1;
+rider_lean = 16'h0000;
+clk = 0;
+    RST_n = 0; // assert reset
+ld_cell_lft = 12'h000;
+ld_cell_rght = 12'h000;
+batt = 12'hA00;
+    repeat (2) @(posedge clk);
+    @(negedge clk); // on negedge REF_CLK after a few REF clocks
+    RST_n = 1; // deasert reset
+    repeat (500) @(negedge clk);
+  end
+endtask
+
+task SendCmd;
+  ///////////////////////////////////////////////////
+  // Passed a 24-bit command to send over the UART// 
+  // (command from host).  It initiates the      //
+  // transfer and waits for the cmd_sent signal //
+  ///////////////////////////////////////////////
+  
+  input [7:0] cmd_to_send;
+
+  begin
+    cmd = cmd_to_send;
+    @(posedge clk);
+    send_cmd = 1;
+    @(posedge clk);
+    send_cmd = 0;
+    //////////////////////////////////////
+    // Now wait for command to be sent //
+    ////////////////////////////////////
+    @(posedge cmd_sent);
+    @(posedge clk);
+  end
+endtask
+
+function out_of_range (input signed [15:0] in_val,expected, input [15:0] bound);
+  out_of_range = ((in_val>$signed(expected + bound)) || (in_val<$signed(expected - bound))) ? 1'b1 : 1'b0;
+endfunction

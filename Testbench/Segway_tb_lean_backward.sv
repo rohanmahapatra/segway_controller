@@ -94,7 +94,7 @@ initial begin
 	// Decrease lean using a step function. Steps of 1000 decimal
 	//
 	for (step = 1; step <= 8; step = step + 1) begin
-		rider_lean = (step * 1000);
+		rider_lean = -(step * 1000);
 		// The big theta waveform "bump" is approx 100,000 clk after we set lean
 		repeat(100000) @(posedge clk);
     		prev_theta = iPHYS.theta_platform;
@@ -104,7 +104,7 @@ initial begin
 		done = 0;
 
 		// Check that we are converging on 0 and that we are closer to 0 at the end of the test then the beginning
-		if (abs(iPHYS.theta_platform) >= abs(prev_theta) || abs(iPHYS.omega_platform) >= PLAT_ERROR || abs(iPHYS.theta_platform) >= PLAT_ERROR) begin
+		if (prev_theta >= 0 || abs(iPHYS.theta_platform) >= abs(prev_theta) || abs(iPHYS.omega_platform) >= PLAT_ERROR || abs(iPHYS.theta_platform) >= PLAT_ERROR) begin
 			$display("FAIL: %d The platform should be converging on zero.", step);
             		$display("iPHYS.theta_platform: %d, iPHYS.omega_platform: %d, prev_omega: %d, prev_theta: %d", 
                     		iPHYS.theta_platform, iPHYS.omega_platform, prev_omega, prev_theta);

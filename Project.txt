@@ -38,4 +38,10 @@ Code Coverage
 Based on the code coverage we found we were not testing when both ovr_spd and batt_low are asserted. We updated our piezo_drv test bench to check this conditon.
 
 
+Synthesis
+Area: 5411 sq microns
+
+Max and Min timing - Slack is positive, Timing met
+
 Post Synthesis Results
+TB passes for Post Synth

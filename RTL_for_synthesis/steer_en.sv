@@ -48,19 +48,20 @@ wire [11:0] rider_weight, rider_weight_abs;
 assign rider_weight = ld_cell_diff;
 assign rider_weight_abs = rider_weight[11] ? ((~rider_weight)+1'b1) : rider_weight;
 
-assign diff_gt_1_4 = (rider_weight_abs > (ld_add/4));
+assign diff_gt_1_4 = (rider_weight_abs > (ld_add/4)) ? 1 : 0    ;
 
-assign diff_gt_15_16 = (rider_weight_abs > 15*(ld_add/16));
+assign diff_gt_15_16 = (rider_weight_abs > 15*(ld_add/16))  ? 1 : 0 ;
 
 
+assign rider_off = ~sum_gt_min;
 
 //assign ld_cell_diff = lft_ld - rght_ld;
 //assign ld_add = lft_ld + rght_ld;
 
-assign ld_cell_diff_w = lft_ld - rght_ld;
-assign ld_add_w = lft_ld + rght_ld;
+assign ld_cell_diff = lft_ld - rght_ld;
+assign ld_add = lft_ld + rght_ld;
 
-
+/*
 always @ (posedge clk, negedge rst_n) begin
 	if (!rst_n) begin
 		ld_cell_diff <= 12'b0;
@@ -73,7 +74,7 @@ always @ (posedge clk, negedge rst_n) begin
 
 
 end
-
+*/
 
 
 //
@@ -118,14 +119,13 @@ always_comb begin
 //assigning to reset values to avoid latches
 nxt_state = IDLE;
 clr_tmr = 1'b0;
-rider_off = 1'b1;
 en_steer = 1'b0;
 case (state)
 	IDLE: if (sum_gt_min) begin  nxt_state = WAIT; clr_tmr = 1'b1; end
 	      else nxt_state = IDLE;
 	WAIT: begin
-		rider_off = 1'b0;
-		if (sum_lt_min) begin nxt_state = IDLE; rider_off = 1'b1 ; end
+		
+		if (sum_lt_min) begin nxt_state = IDLE;  end
 	        else if (diff_gt_1_4) begin
 			nxt_state = WAIT;
 			clr_tmr = 1'b1;
@@ -137,8 +137,8 @@ case (state)
        		else nxt_state = WAIT;				// shouldn't we assert clr_tmr = 1'b0 ????????????
 	       end
 	STEER_EN: begin
-		  rider_off = 1'b0;
-		  if (sum_lt_min) begin  nxt_state = IDLE; rider_off = 1'b1; end
+		
+		  if (sum_lt_min) begin  nxt_state = IDLE; end
 		  else if (diff_gt_15_16) begin nxt_state = WAIT; clr_tmr = 1'b1; end
 		  else begin  nxt_state = STEER_EN; en_steer = 1'b1; end
 end

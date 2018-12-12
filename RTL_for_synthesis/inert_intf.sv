@@ -211,19 +211,8 @@ always @ (posedge clk, negedge rst_n) begin
 	end
 end
 
-
-always @ (posedge clk, negedge rst_n) begin
-
-	if (!rst_n) begin
-		ptch_rt <= 0;
-		az <= 0;
-	end
-	else
-	if (ready) begin
-		ptch_rt <= {ptchh, ptchl};
-		az <= {azh, azl};
-	end
-end
+assign ptch_rt = {ptchh, ptchl};
+assign az = {azh, azl};
 
 
 
